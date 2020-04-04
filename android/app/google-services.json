@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "365978098253",
+    "firebase_url": "https://second-908d1.firebaseio.com",
+    "project_id": "second-908d1",
+    "storage_bucket": "second-908d1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:365978098253:android:da4cb955e6752d4251da04",
+        "android_client_info": {
+          "package_name": "com.example.kios_agro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "365978098253-en8gfafsqpke5r5cu0itqee0mlhp9di4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kios_agro",
+            "certificate_hash": "2a6940ea5c4ce16bcc9386b2a5b9d4fa2896369e"
+          }
+        },
+        {
+          "client_id": "365978098253-c062bpqvt1d84iorjdi0oljfqumnsm2g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDe2JxseZQ9pz8dvBZDwQcilEyt4NafvEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "365978098253-c062bpqvt1d84iorjdi0oljfqumnsm2g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "365978098253-nj3frq4ds82n80fcudue850qeiso13uu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.kiosAgro"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
