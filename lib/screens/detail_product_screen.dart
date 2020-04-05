@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 class DetailProductScreen extends StatefulWidget {
   ProductModel product;
-  Image image;
+  var image;
 
   DetailProductScreen(this.product, this.image);
 

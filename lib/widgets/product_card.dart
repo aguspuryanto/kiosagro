@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:kios_agro/models/product_model.dart';
 import 'package:kios_agro/screens/detail_product_screen.dart';
@@ -36,12 +37,35 @@ class _ProductCardState extends State<ProductCard> {
                 width: MediaQuery.of(context).size.width / 2 - 40,
                 child: Center(
                   child: FutureBuilder(
-                    future: _getImage(context, 'wortel.jpg'),
+                    future: FirebaseStorage.instance
+                        .ref()
+                        .child('/products/${widget.product.key}/1.jpeg')
+                        .getDownloadURL()
+                        .then((value) => value)
+                        .catchError((e) {
+                      print('error coi');
+                    }),
                     builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        print('error');
+                      }
                       if (snapshot.connectionState == ConnectionState.done) {
-                        image = snapshot.data;
-
-                        return snapshot.data;
+                        if (snapshot.hasError) {
+                          print('ada error');
+                        }
+                        if (snapshot.hasData) {
+                          image = Image.network(
+                            snapshot.data,
+                            fit: BoxFit.fill,
+                          );
+                          return image;
+                        } else {
+                          image = Icon(
+                            Icons.image,
+                            size: 100,
+                            color: Colors.greenAccent[100],
+                          );
+                        }
                       }
 
                       if (snapshot.connectionState == ConnectionState.waiting)
@@ -50,6 +74,7 @@ class _ProductCardState extends State<ProductCard> {
                       return Icon(
                         Icons.image,
                         color: Colors.greenAccent[100],
+                        size: 100,
                       );
                     },
                   ),
@@ -85,18 +110,5 @@ class _ProductCardState extends State<ProductCard> {
         ),
       ),
     );
-  }
-
-  Future<Widget> _getImage(BuildContext context, String image) async {
-    Image m;
-    await FireStorageService.loadFromStorage(context, image)
-        .then((downloadUrl) {
-      m = Image.network(
-        downloadUrl.toString(),
-        fit: BoxFit.fill,
-      );
-    });
-
-    return m;
   }
 }

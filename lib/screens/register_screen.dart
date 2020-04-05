@@ -56,7 +56,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     setState(() {
       listKabupaten = tempList;
     });
-    print(listKabupaten);
   }
 
   getKecamatan(cityId) {
@@ -76,7 +75,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         setState(() {
           listKecamatan = tempList;
         });
-        print(listKecamatan);
       },
     );
   }
@@ -114,7 +112,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             _kecamatanName,
             _kabupatenName,
             _provinsiName,
-            _kecamatan))
+            _kecamatan,
+            _kabupaten,
+            _provinsi))
           _key.currentState.showSnackBar(
             SnackBar(
               content: Text('Email sudah terdaftar'),
@@ -126,7 +126,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       key: _key,
       appBar: AppBar(
-        title: Text('Daftar'),
+        title: Text(
+            auth.status == Status.Authenticating ? 'Authenticating' : 'Daftar'),
       ),
       body: SafeArea(
         child: Center(
@@ -237,7 +238,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       _provinsi = newValue;
                                       _kabupaten = null;
                                       _kecamatan = null;
-                                      print(newValue);
                                     });
                                     getKabupaten(newValue);
                                   },
@@ -275,7 +275,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     setState(() {
                                       _kabupaten = newValue;
                                       _kecamatan = null;
-                                      print(newValue);
                                     });
                                     getKecamatan(newValue);
                                   },
@@ -314,7 +313,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   onChanged: (newValue) {
                                     setState(() {
                                       _kecamatan = newValue;
-                                      print(newValue);
                                     });
                                   },
                                   value: _kecamatan,

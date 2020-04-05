@@ -18,7 +18,7 @@ class CategoryProductScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Container(
             margin: EdgeInsets.symmetric(vertical: 20),
-            child: Center(child: ListProducts()),
+            child: Center(child: ListProducts(_title)),
           ),
         ),
       ),
@@ -27,6 +27,9 @@ class CategoryProductScreen extends StatelessWidget {
 }
 
 class ListProducts extends StatelessWidget {
+  final _title;
+  ListProducts(this._title);
+
   @override
   Widget build(BuildContext context) {
     List<ProductModel> sortedProducts =
@@ -37,10 +40,10 @@ class ListProducts extends StatelessWidget {
     var index = 0;
     return Wrap(
       children: sortedProducts.map<Widget>((prod) {
-        index++;
-        if (prod.category == "Hasil Olahan" && index < 20)
+        if (prod.category.contains(_title) && index < 20) {
+          index++;
           return ProductCard(prod);
-        else
+        } else
           return SizedBox();
       }).toList(),
     );

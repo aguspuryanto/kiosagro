@@ -28,30 +28,43 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         theme: ThemeData(primarySwatch: Colors.green),
         debugShowCheckedModeBanner: false,
-        home: SplashScreen(
-          image: Image.asset('logo.png'),
-          photoSize: 100.0,
-          seconds: 0,
-          navigateAfterSeconds: Consumer(
-            builder: (context, AuthProvider auth, _) {
-              print(auth.status);
-              print('user model');
-              print(auth.userModel);
-              switch (auth.status) {
-                case Status.Authenticating:
-                case Status.Uninitialized:
-                  return RegisterScreen();
-                  break;
-                case Status.Unauthenticated:
-                  return LoginScreen();
-                  break;
-                case Status.Authenticated:
-                  return ScreenControl();
-                  break;
-              }
-            },
-          ),
-        ),
+        home: Splash(),
+      ),
+    );
+  }
+}
+
+class Splash extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var auth = Provider.of<AuthProvider>(context);
+    var user = Provider.of<UserProvider>(context);
+
+    try {
+      if (auth.user.uid != null) user.getUserData(auth.user.uid);
+    } catch (e) {}
+
+    return SplashScreen(
+      image: Image.asset('logo.png'),
+      photoSize: 100.0,
+      seconds: 0,
+      navigateAfterSeconds: Consumer(
+        builder: (context, AuthProvider auth, _) {
+          switch (auth.status) {
+            case Status.Authenticating:
+            case Status.Uninitialized:
+              return RegisterScreen();
+              break;
+            case Status.Unauthenticated:
+              return LoginScreen();
+              break;
+            case Status.Authenticated:
+              user.getUserData(auth.user.uid);
+
+              return ScreenControl();
+              break;
+          }
+        },
       ),
     );
   }

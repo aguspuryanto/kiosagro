@@ -37,8 +37,20 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         actions: <Widget>[
           Stack(children: [
+            Container(
+              margin: EdgeInsets.only(top: 10, right: 10),
+              child: IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.shopping_cart,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+            ),
             Positioned(
-              right: 20,
+              right: 10,
+              top: 5,
               child: Container(
                 padding: EdgeInsets.all(5),
                 decoration: BoxDecoration(
@@ -48,17 +60,6 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: Text(
                   '10',
                   style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 10, right: 10),
-              child: IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.shopping_cart,
-                  color: Colors.white,
-                  size: 30,
                 ),
               ),
             ),
@@ -237,13 +238,16 @@ class ListProducts extends StatelessWidget {
     List<ProductModel> sortedProducts = products.products;
 
     sortedProducts.sort((a, b) {
-      return (a.name.compareTo(b.name));
+      return (a.record.compareTo(b.record));
     });
     var index = 0;
     return Wrap(
       children: sortedProducts.map<Widget>((prod) {
-        index++;
+        // index++;
+        // if (index < 10)
         return ProductCard(prod);
+        // else
+        //   return SizedBox();
       }).toList(),
     );
   }

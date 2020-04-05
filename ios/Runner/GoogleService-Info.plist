@@ -3,34 +3,34 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>365978098253-nj3frq4ds82n80fcudue850qeiso13uu.apps.googleusercontent.com</string>
+	<string>791361054264-u2j71rm7mvs07r8c97783m6upemfr5bm.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.365978098253-nj3frq4ds82n80fcudue850qeiso13uu</string>
+	<string>com.googleusercontent.apps.791361054264-u2j71rm7mvs07r8c97783m6upemfr5bm</string>
 	<key>API_KEY</key>
-	<string>AIzaSyD-QsvvwI7-C8ftdmuU18tOd2t5j10Gl3Y</string>
+	<string>AIzaSyAg6Hkxe7omH2BgUa3FNu_CrxilCDjZuMc</string>
 	<key>GCM_SENDER_ID</key>
-	<string>365978098253</string>
+	<string>791361054264</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.kiosAgro</string>
 	<key>PROJECT_ID</key>
-	<string>second-908d1</string>
+	<string>projectflutter-9b7b1</string>
 	<key>STORAGE_BUCKET</key>
-	<string>second-908d1.appspot.com</string>
+	<string>projectflutter-9b7b1.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:365978098253:ios:2407f6b90878266051da04</string>
+	<string>1:791361054264:ios:d648c12c81a6b10e65a8cd</string>
 	<key>DATABASE_URL</key>
-	<string>https://second-908d1.firebaseio.com</string>
+	<string>https://projectflutter-9b7b1.firebaseio.com</string>
 </dict>
 </plist>

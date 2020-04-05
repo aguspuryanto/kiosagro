@@ -15,11 +15,7 @@ class UserProvider extends ChangeNotifier {
         .child('users/${uid.toString()}')
         .once()
         .then((value) {
-      print('user');
-      print(value.value);
       _user = UserModel.fromSnapshot(value.key, value.value);
-      print(_user.email);
-      notifyListeners();
     });
   }
 }

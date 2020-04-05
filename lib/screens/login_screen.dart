@@ -25,8 +25,6 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthProvider>(context);
 
-    print(auth.user);
-
     return Scaffold(
       key: _key,
       body: Stack(children: [

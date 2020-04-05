@@ -25,7 +25,7 @@ class _ScreenControlState extends State<ScreenControl> {
     final auth = Provider.of<AuthProvider>(context);
     final user = Provider.of<UserProvider>(context);
 
-    user.getUserData(auth.user.uid);
+    // user.getUserData(auth.user.uid);
 
     var appBarList = [
       HomeAppBar(80.0),
@@ -37,7 +37,7 @@ class _ScreenControlState extends State<ScreenControl> {
       HomeScreen(),
       HomeScreen(),
       HomeScreen(),
-      AccountScreen(_key)
+      AccountScreen(_key, user),
     ];
 
     return Scaffold(

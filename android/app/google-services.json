@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "365978098253",
-    "firebase_url": "https://second-908d1.firebaseio.com",
-    "project_id": "second-908d1",
-    "storage_bucket": "second-908d1.appspot.com"
+    "project_number": "791361054264",
+    "firebase_url": "https://projectflutter-9b7b1.firebaseio.com",
+    "project_id": "projectflutter-9b7b1",
+    "storage_bucket": "projectflutter-9b7b1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:365978098253:android:da4cb955e6752d4251da04",
+        "mobilesdk_app_id": "1:791361054264:android:ff45c47ad2f1b7a065a8cd",
         "android_client_info": {
           "package_name": "com.example.kios_agro"
         }
       },
       "oauth_client": [
         {
-          "client_id": "365978098253-en8gfafsqpke5r5cu0itqee0mlhp9di4.apps.googleusercontent.com",
+          "client_id": "791361054264-su676fqnriblfajp65gr6j02kg173pri.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.kios_agro",
@@ -23,24 +23,24 @@
           }
         },
         {
-          "client_id": "365978098253-c062bpqvt1d84iorjdi0oljfqumnsm2g.apps.googleusercontent.com",
+          "client_id": "791361054264-tio7tabf46jm3isrdjf774h1uvg36n6v.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDe2JxseZQ9pz8dvBZDwQcilEyt4NafvEI"
+          "current_key": "AIzaSyDS8zUgRRcJuTQzMQb6P-Uce7gK3w2MmPc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "365978098253-c062bpqvt1d84iorjdi0oljfqumnsm2g.apps.googleusercontent.com",
+              "client_id": "791361054264-tio7tabf46jm3isrdjf774h1uvg36n6v.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "365978098253-nj3frq4ds82n80fcudue850qeiso13uu.apps.googleusercontent.com",
+              "client_id": "791361054264-u2j71rm7mvs07r8c97783m6upemfr5bm.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.example.kiosAgro"

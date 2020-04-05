@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:kios_agro/models/user_model.dart';
+import 'package:kios_agro/providers/user_provider.dart';
 
 enum Status {
   Uninitialized,
@@ -20,6 +21,7 @@ class AuthProvider extends ChangeNotifier {
     'email',
     'https://www.googleapis.com/auth/contacts.readonly',
   ]);
+
   Status _status = Status.Uninitialized;
 
   AuthProvider.instance() : _auth = FirebaseAuth.instance {
@@ -59,7 +61,9 @@ class AuthProvider extends ChangeNotifier {
       String kecamatan,
       String kabupaten,
       String provinsi,
-      var idKec) async {
+      var idKec,
+      var idKab,
+      var idProv) async {
     try {
       _status = Status.Authenticating;
       notifyListeners();
@@ -72,11 +76,16 @@ class AuthProvider extends ChangeNotifier {
       var newUser = {
         'alamat': {
           'id': idKec,
+          'id_kabupaten': idKab,
+          'id_provinsi': idProv,
           'alamat': alamat,
           'kecamatan': kecamatan,
           'kabupaten': kabupaten,
           'provinsi': provinsi
         },
+        'balance': 0,
+        'bank': '',
+        'holder': '',
         'email': email,
         'mutasi': [],
         'nama': name,
@@ -137,42 +146,52 @@ class AuthProvider extends ChangeNotifier {
 
       assert(user.uid == currentUser.uid);
 
-      print('Signed In' + _user.displayName);
-
-      var newUser = {
-        'alamat': {
-          'id': '',
-          'alamat': '',
-          'kecamatan': '',
-          'kabupaten': '',
-          'provinsi': ''
-        },
-        'email': _user.email,
-        'mutasi': [],
-        'nama': _user.displayName,
-        'namatoko': '',
-        'orders': {
-          'seller': [],
-          'buyyer': [],
-        },
-        'pengiriman': '',
-        'player_id': '',
-        'products': [],
-        'rating': [],
-        'rekening': '',
-        'subscribe': 'free',
-        'surname': '',
-        'telepon': '',
-        'urltoko': '',
-        'verifyshop': false,
-      };
-
       FirebaseDatabase.instance
           .reference()
           .child('/users/${_user.uid.toString()}')
-          .update(newUser)
-          .then((value) => print('berhasil'))
-          .catchError((e) => print(e));
+          .once()
+          .then(
+        (value) {
+          if (value.value == null) {
+            var newUser = {
+              'alamat': {
+                'id': '',
+                'id_kabupaten': '',
+                'id_provinsi': '',
+                'alamat': '',
+                'kecamatan': '',
+                'kabupaten': '',
+                'provinsi': ''
+              },
+              'email': _user.email,
+              'mutasi': [],
+              'nama': _user.displayName,
+              'namatoko': '',
+              'orders': {
+                'seller': [],
+                'buyyer': [],
+              },
+              'pengiriman': '',
+              'player_id': '',
+              'products': [],
+              'rating': [],
+              'rekening': '',
+              'subscribe': 'free',
+              'surname': '',
+              'telepon': '',
+              'urltoko': '',
+              'verifyshop': false,
+            };
+
+            FirebaseDatabase.instance
+                .reference()
+                .child('/users/${_user.uid.toString()}')
+                .update(newUser)
+                .then((value) => print('berhasil'))
+                .catchError((e) => print(e));
+          }
+        },
+      );
 
       _status = Status.Authenticated;
 
@@ -195,6 +214,7 @@ class AuthProvider extends ChangeNotifier {
     } else {
       _user = firebaseUser;
       _status = Status.Authenticated;
+      UserProvider().getUserData(_user.uid);
     }
     notifyListeners();
   }
