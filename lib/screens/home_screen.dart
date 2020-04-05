@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:kios_agro/models/product_model.dart';
+import 'package:kios_agro/providers/cart_provider.dart';
 import 'package:kios_agro/providers/product_provider.dart';
 import 'package:kios_agro/screens/category_product_screen.dart';
 import 'package:kios_agro/widgets/product_card.dart';
@@ -14,6 +15,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    var cart = Provider.of<CartProvider>(context);
+
     return PreferredSize(
       preferredSize: Size.fromHeight(_height),
       child: AppBar(
@@ -58,7 +61,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                   color: Colors.orange,
                 ),
                 child: Text(
-                  '10',
+                  cart.cartProducts.length.toString(),
                   style: TextStyle(color: Colors.white),
                 ),
               ),

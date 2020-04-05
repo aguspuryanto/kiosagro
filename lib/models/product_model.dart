@@ -55,7 +55,7 @@ class ProductModel {
       harga: data["Harga"],
       images: data["Image"],
       kota: data["Kota"].replaceAll(new RegExp(r'[^\w\s]+'), ''),
-      merchant: data["Merchant"],
+      merchant: data["Merchant"].replaceAll(new RegExp(r'[^\w\s]+'), ''),
       name: data["Name"].replaceAll(new RegExp(r'[^\w\s]+'), ''),
       originId: data["OriginID"],
       originType: data["OriginType"],
@@ -64,7 +64,7 @@ class ProductModel {
       sku: data["SKU"],
       unit: data["Unit"],
       update: data["Update"],
-      record: data["record"],
+      record: data["record"].replaceAll(new RegExp(r'[^\w\s]+'), ''),
     );
   }
 }
