@@ -18,4 +18,19 @@ class UserProvider extends ChangeNotifier {
       _user = UserModel.fromSnapshot(value.key, value.value);
     });
   }
+
+  updateData(accountData) async {
+    await FirebaseDatabase.instance
+        .reference()
+        .child('/users/${_user.key.toString()}')
+        .update(accountData)
+        .then((value) {
+      getUserData(_user.key);
+      return true;
+    }).catchError((e) {
+      print(e);
+      return false;
+    });
+    return true;
+  }
 }

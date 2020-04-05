@@ -52,7 +52,7 @@ class ProductModel {
       coret: data["Coret"],
       deskripsi: data["Deskripsi"].replaceAll(new RegExp(r'[^\w\s]+'), ''),
       discount: data["Discount"],
-      harga: data["Harga"],
+      harga: int.parse(data["Harga"]),
       images: data["Image"],
       kota: data["Kota"].replaceAll(new RegExp(r'[^\w\s]+'), ''),
       merchant: data["Merchant"].replaceAll(new RegExp(r'[^\w\s]+'), ''),

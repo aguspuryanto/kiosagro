@@ -26,7 +26,7 @@ class AccountAppBar extends StatelessWidget implements PreferredSizeWidget {
 
 class AccountScreen extends StatefulWidget {
   final _key;
-  final _user;
+  UserProvider _user;
 
   AccountScreen(this._key, this._user);
 
@@ -215,6 +215,7 @@ class _AccountScreenState extends State<AccountScreen> {
             .child('/users/${widget._user.user.key.toString()}')
             .update(toko)
             .then((value) {
+          widget._user.getUserData(widget._user.user.key);
           setState(() {
             _urlToko = 'https://www.kiosagro.com/kios/$namaToko';
           });
@@ -235,17 +236,32 @@ class _AccountScreenState extends State<AccountScreen> {
     if (jne == true) kurir = 'jne:$kurir';
     if (tiki == true) kurir = 'tiki:$kurir';
 
+    var _provinsiName = '';
+    var _kabupatenName = '';
+    var _kecamatanName = '';
+
+    listProvinsi.forEach((prov) {
+      if (prov['province_id'] == _provinsi) _provinsiName = prov['province'];
+    });
+    listKabupaten.forEach((kab) {
+      if (kab['city_id'] == _kabupaten) _kabupatenName = kab['city_name'];
+    });
+    listKecamatan.forEach((kec) {
+      if (kec['subdistrict_id'] == _kecamatan)
+        _kecamatanName = kec['subdistrict_name'];
+    });
+
     var accountData = {
       'nama': _nama.text,
       'telepon': _noTelp.text,
       'alamat': {
-        'id': widget._user.user.alamat['id'],
-        'id_kabupaten': widget._user.user.alamat['id_kabupaten'],
-        'id_provinsi': widget._user.user.alamat['id_provinsi'],
-        'alamat': widget._user.user.alamat['alamat'],
-        'kecamatan': widget._user.user.alamat['kecamatan'],
-        'kabupaten': widget._user.user.alamat['kabupaten'],
-        'provinsi': widget._user.user.alamat['provinsi']
+        'id': _kecamatan,
+        'id_kabupaten': _kabupaten,
+        'id_provinsi': _provinsi,
+        'alamat': _alamat.text,
+        'kecamatan': _kecamatanName,
+        'kabupaten': _kabupatenName,
+        'provinsi': _provinsiName
       },
       'rekening': _noRek.text,
       'bank': _namaBank.text,
@@ -253,18 +269,7 @@ class _AccountScreenState extends State<AccountScreen> {
       'pengiriman': kurir
     };
 
-    await FirebaseDatabase.instance
-        .reference()
-        .child('/users/${widget._user.user.key.toString()}')
-        .update(accountData)
-        .then((value) {
-      setState(() {});
-      return true;
-    }).catchError((e) {
-      print(e);
-      setState(() {});
-      return false;
-    });
+    widget._user.updateData(accountData);
 
     return true;
   }
@@ -341,7 +346,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       height: 20,
                     ),
                     TextFormField(
-                      initialValue: user.user.alamat['alamat'],
+                      controller: _alamat,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Alamat: ',

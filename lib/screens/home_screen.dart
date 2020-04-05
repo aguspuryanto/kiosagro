@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kios_agro/models/product_model.dart';
 import 'package:kios_agro/providers/cart_provider.dart';
 import 'package:kios_agro/providers/product_provider.dart';
+import 'package:kios_agro/screens/cart_detail_screen.dart';
 import 'package:kios_agro/screens/category_product_screen.dart';
 import 'package:kios_agro/widgets/product_card.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +44,12 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             Container(
               margin: EdgeInsets.only(top: 10, right: 10),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CartDetailScreen()));
+                },
                 icon: Icon(
                   Icons.shopping_cart,
                   color: Colors.white,

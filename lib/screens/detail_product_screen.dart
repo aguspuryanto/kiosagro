@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kios_agro/models/product_model.dart';
+import 'package:kios_agro/providers/cart_provider.dart';
 import 'package:kios_agro/providers/user_provider.dart';
 import 'package:kios_agro/storage/fire_storage_services.dart';
 import 'package:provider/provider.dart';
@@ -48,6 +49,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<UserProvider>(context).user;
+    var cart = Provider.of<CartProvider>(context);
 
     checkIsComplete() {
       if (!user.telepon.isEmpty &&
@@ -59,6 +61,10 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
       } else {
         return false;
       }
+    }
+
+    handleSubmit() {
+      cart.addProduct(widget.product, _total, widget.image);
     }
 
     return Scaffold(
@@ -78,7 +84,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                   margin: EdgeInsets.only(right: 10),
                   color: Colors.greenAccent[100],
                   child: IconButton(
-                    icon: Icon(Icons.arrow_left),
+                    icon: Icon(Icons.remove),
                     onPressed: () {
                       setState(() {
                         if (_total != 0) {
@@ -96,7 +102,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                   margin: EdgeInsets.only(left: 10),
                   color: Colors.greenAccent[100],
                   child: IconButton(
-                    icon: Icon(Icons.arrow_right),
+                    icon: Icon(Icons.add),
                     onPressed: () {
                       setState(() {
                         _total++;
@@ -116,6 +122,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                   if (_total != 0) {
                     print(checkIsComplete());
                     if (checkIsComplete() == true) {
+                      handleSubmit();
                       successDialog();
                     } else {
                       _key.currentState.showSnackBar(
