@@ -66,9 +66,7 @@ class _CartDetailScreenState extends State<CartDetailScreen> {
                             return Container();
                           },
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
+                        Divider(),
                         MerchantProductList(cart.merchants[index], true),
                         SizedBox(
                           height: 10,

@@ -17,10 +17,10 @@ class _ProductCartState extends State<ProductCart> {
     var cart = Provider.of<CartProvider>(context);
 
     return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.green),
-        borderRadius: BorderRadius.circular(10),
-      ),
+      // decoration: BoxDecoration(
+      //   border: Border.all(color: Colors.green),
+      //   borderRadius: BorderRadius.circular(10),
+      // ),
       child: ListTile(
         isThreeLine: (widget.enableButton == true ? true : false),
         leading: Container(

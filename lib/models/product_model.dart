@@ -46,7 +46,7 @@ class ProductModel {
   factory ProductModel.fromSnapshot(key, data) {
     return ProductModel(
       key: key,
-      berat: data["Berat"],
+      berat: int.parse(data["Berat"]),
       category: data["Category"].replaceAll(new RegExp(r'[^\w\s]+'), ''),
       comment: data["Comment"],
       coret: data["Coret"],

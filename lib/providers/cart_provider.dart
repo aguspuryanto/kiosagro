@@ -1,5 +1,7 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:kios_agro/models/product_model.dart';
+import 'package:kios_agro/models/user_model.dart';
 
 class CartProvider extends ChangeNotifier {
   List<ProductModel> _cartProducts = [];
@@ -9,6 +11,11 @@ class CartProvider extends ChangeNotifier {
 
   List<ProductModel> _selectedCarts = [];
   var _selectedMerchant = '';
+  var _selectedCourier;
+  var _grossAmount;
+
+  var buyer;
+  UserModel _seller;
 
   get cartProducts => _cartProducts;
 
@@ -21,6 +28,12 @@ class CartProvider extends ChangeNotifier {
   get selectedCarts => _selectedCarts;
 
   get selectedMerchant => _selectedMerchant;
+
+  get selectedCourier => _selectedCourier;
+
+  get seller => _seller;
+
+  get grossAmount => _grossAmount;
 
   addProduct(ProductModel product, amount, image) {
     var index = -1;
@@ -75,7 +88,20 @@ class CartProvider extends ChangeNotifier {
     return totalPrice;
   }
 
-  setSelected(merchant) {
+  getTotalWeight(merchant) {
+    var totalWeight = 0;
+    var index = 0;
+    _cartProducts.forEach((prod) {
+      if (prod.merchant == merchant) {
+        totalWeight += (prod.berat * amounts[index]);
+      }
+      index++;
+    });
+    print(totalWeight);
+    return totalWeight;
+  }
+
+  setSelected(merchant) async {
     List<ProductModel> tempList = [];
     _cartProducts.forEach((prod) {
       if (prod.merchant == merchant) {
@@ -85,6 +111,17 @@ class CartProvider extends ChangeNotifier {
 
     _selectedCarts = tempList;
     _selectedMerchant = merchant;
+  }
+
+  setSeller(userSeller) async {
+    _seller = userSeller;
+  }
+
+  setCourier(courier) {
+    _selectedCourier = courier;
+    print(courier);
+    _grossAmount =
+        getTotalPrice(_selectedMerchant) + courier['cost'][0]['value'];
   }
 
   cartNotifyListeners() {

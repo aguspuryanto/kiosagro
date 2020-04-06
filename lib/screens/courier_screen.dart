@@ -1,6 +1,11 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:kios_agro/models/user_model.dart';
+import 'package:kios_agro/providers/cart_provider.dart';
+import 'package:kios_agro/providers/user_provider.dart';
 import 'package:kios_agro/screens/checkout_screen.dart';
+import 'package:provider/provider.dart';
 
 class CourierScreen extends StatefulWidget {
   @override
@@ -8,85 +13,10 @@ class CourierScreen extends StatefulWidget {
 }
 
 class _CourierScreenState extends State<CourierScreen> {
-  var listCost = [];
-
-  @override
-  void initState() {
-    super.initState();
-    getCost();
-  }
-
-  getCost() async {
-    var listJneCost = await getJneCost();
-    var listJntCost = await getJntCost();
-    setState(() {
-      listCost = [...listJneCost, ...listJntCost];
-    });
-  }
-
-  getJneCost() async {
-    var tempList = [];
-
-    await Dio().post('https://pro.rajaongkir.com/api/cost',
-        options: Options(
-          headers: {
-            'key': 'eb9420bd896a4915739f4d8bc1e6ba13',
-          },
-        ),
-        data: {
-          'origin': '501',
-          'originType': 'city',
-          'destination': '574',
-          'destinationType': 'subdistrict',
-          'weight': '1700',
-          'courier': 'jne'
-        }).then((value) {
-      var data = value.data['rajaongkir']['results'][0]['costs'];
-      var code = value.data['rajaongkir']['results'][0]['code'];
-      data.forEach((cost) {
-        cost['code'] = code;
-        tempList.add(cost);
-      });
-    }).catchError((e) {
-      print(e);
-    });
-
-    return tempList;
-  }
-
-  getJntCost() async {
-    var tempList = [];
-
-    await Dio().post('https://pro.rajaongkir.com/api/cost',
-        options: Options(
-          headers: {
-            'key': 'eb9420bd896a4915739f4d8bc1e6ba13',
-          },
-        ),
-        data: {
-          'origin': '501',
-          'originType': 'city',
-          'destination': '574',
-          'destinationType': 'subdistrict',
-          'weight': '1700',
-          'courier': 'jnt'
-        }).then((value) {
-      var data = value.data['rajaongkir']['results'][0]['costs'];
-      var code = value.data['rajaongkir']['results'][0]['code'];
-      data.forEach((cost) {
-        cost['code'] = code;
-        tempList.add(cost);
-      });
-    }).catchError((e) {
-      print(e);
-    });
-
-    return tempList;
-  }
-
   @override
   Widget build(BuildContext context) {
-    print(listCost);
+    var cart = Provider.of<CartProvider>(context);
+    var user = Provider.of<UserProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -117,13 +47,137 @@ class _CourierScreenState extends State<CourierScreen> {
             SizedBox(
               height: 20,
             ),
-            (listCost.length == 0
-                ? Center(child: CircularProgressIndicator())
-                : ListCost(listCost)),
+            FutureBuilder(
+              future: FirebaseDatabase.instance
+                  .reference()
+                  .child('users/${cart.selectedMerchant}')
+                  .once()
+                  .then((value) {
+                // print(value.value);
+                var seller =
+                    UserModel.fromSnapshot(cart.selectedMerchant, value.value);
+                cart.setSeller(seller);
+                return seller;
+              }),
+              builder: (context, snapshot) {
+                return CourierList(cart, user.user);
+              },
+            ),
           ],
         )),
       ),
     );
+  }
+}
+
+class CourierList extends StatefulWidget {
+  var cart;
+  UserModel user;
+
+  CourierList(this.cart, this.user);
+
+  @override
+  _CourierListState createState() => _CourierListState();
+}
+
+class _CourierListState extends State<CourierList> {
+  var listCost = [];
+  UserModel seller;
+  UserModel buyer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    widget.cart.getTotalWeight(widget.cart.selectedMerchant);
+
+    setState(() {
+      seller = widget.cart.seller;
+      buyer = widget.user;
+    });
+
+    getCost();
+  }
+
+  getCost() async {
+    var listJneCost = await getJneCost();
+    var listJntCost = await getJntCost();
+    setState(() {
+      listCost = [...listJneCost, ...listJntCost];
+    });
+  }
+
+  getJneCost() async {
+    var tempList = [];
+
+    await Dio().post('https://pro.rajaongkir.com/api/cost',
+        options: Options(
+          headers: {
+            'key': 'eb9420bd896a4915739f4d8bc1e6ba13',
+          },
+        ),
+        data: {
+          'origin':
+              '${seller.alamat['id'].replaceAll(new RegExp(r'[^\w\s]+'), '')}',
+          'originType': 'subdistrict',
+          'destination':
+              '${buyer.alamat['id'].replaceAll(new RegExp(r'[^\w\s]+'), '')}',
+          'destinationType': 'subdistrict',
+          'weight': '${widget.cart.getTotalWeight(seller.key)}',
+          'courier': 'jne'
+        }).then((value) {
+      // print(value.data);
+      var data = value.data['rajaongkir']['results'][0]['costs'];
+      var code = value.data['rajaongkir']['results'][0]['code'];
+      data.forEach((cost) {
+        cost['code'] = code;
+        tempList.add(cost);
+      });
+    }).catchError((e) {
+      print(e);
+    });
+
+    return tempList;
+  }
+
+  getJntCost() async {
+    var tempList = [];
+
+    await Dio().post('https://pro.rajaongkir.com/api/cost',
+        options: Options(
+          headers: {
+            'key': 'eb9420bd896a4915739f4d8bc1e6ba13',
+          },
+        ),
+        data: {
+          'origin':
+              '${seller.alamat['id'].replaceAll(new RegExp(r'[^\w\s]+'), '')}',
+          'originType': 'subdistrict',
+          'destination':
+              '${buyer.alamat['id'].replaceAll(new RegExp(r'[^\w\s]+'), '')}',
+          'destinationType': 'subdistrict',
+          'weight': '${widget.cart.getTotalWeight(seller.key)}',
+          'courier': 'jnt'
+        }).then((value) {
+      // print(value.data);
+      var data = value.data['rajaongkir']['results'][0]['costs'];
+      var code = value.data['rajaongkir']['results'][0]['code'];
+      data.forEach((cost) {
+        cost['code'] = code;
+        tempList.add(cost);
+      });
+    }).catchError((e) {
+      print(e);
+    });
+
+    return tempList;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return (listCost.length == 0
+        ? Center(child: CircularProgressIndicator())
+        : ListCost(listCost));
   }
 }
 
@@ -150,6 +204,9 @@ class _ListCostState extends State<ListCost> {
 
   @override
   Widget build(BuildContext context) {
+    var cart = Provider.of<CartProvider>(context);
+    cart.setCourier(selectedCost);
+
     return Column(
       children: widget.listCost.map<Widget>((cost) {
         return ListTile(
@@ -179,6 +236,7 @@ class _ListCostState extends State<ListCost> {
             onChanged: (newValue) {
               setState(() {
                 selectedCost = newValue;
+                cart.setCourier(newValue);
               });
             },
           ),
