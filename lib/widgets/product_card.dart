@@ -39,8 +39,8 @@ class _ProductCardState extends State<ProductCard> {
                   child: FutureBuilder(
                     future: FirebaseStorage.instance
                         .ref()
-                        // .child('/products/${widget.product.key}/1.jpeg')
-                        .child('brocolli.jpg')
+                        .child('/products/${widget.product.key}/1.jpeg')
+                        // .child('brocolli.jpg')
                         .getDownloadURL()
                         .then((value) => value)
                         .catchError((e) {

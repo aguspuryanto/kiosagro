@@ -6,6 +6,7 @@ import 'package:kios_agro/providers/cart_provider.dart';
 import 'package:kios_agro/providers/product_provider.dart';
 import 'package:kios_agro/screens/cart_detail_screen.dart';
 import 'package:kios_agro/screens/category_product_screen.dart';
+import 'package:kios_agro/screens/search_screen.dart';
 import 'package:kios_agro/widgets/product_card.dart';
 import 'package:provider/provider.dart';
 
@@ -21,21 +22,29 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     return PreferredSize(
       preferredSize: Size.fromHeight(_height),
       child: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: false,
-        title: Container(
-          margin: EdgeInsets.only(top: 10),
-          decoration: BoxDecoration(
-            shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.circular(8),
-            color: Colors.white,
-          ),
-          child: TextFormField(
-            style: TextStyle(fontSize: 16),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              prefixIcon: Icon(Icons.search),
-              hintText: 'Cari Beras',
-              hintStyle: TextStyle(fontSize: 20),
+        title: GestureDetector(
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => SearchScreen()));
+          },
+          child: Container(
+            margin: EdgeInsets.only(top: 10),
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.white,
+            ),
+            child: TextFormField(
+              enabled: false,
+              style: TextStyle(fontSize: 20),
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                prefixIcon: Icon(Icons.search),
+                hintText: 'Cari Beras',
+                hintStyle: TextStyle(fontSize: 20),
+              ),
             ),
           ),
         ),

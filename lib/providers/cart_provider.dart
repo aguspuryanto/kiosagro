@@ -7,6 +7,9 @@ class CartProvider extends ChangeNotifier {
   List _amounts = [];
   List _images = [];
 
+  List<ProductModel> _selectedCarts = [];
+  var _selectedMerchant = '';
+
   get cartProducts => _cartProducts;
 
   get merchants => _merchants;
@@ -14,6 +17,10 @@ class CartProvider extends ChangeNotifier {
   get amounts => _amounts;
 
   get images => _images;
+
+  get selectedCarts => _selectedCarts;
+
+  get selectedMerchant => _selectedMerchant;
 
   addProduct(ProductModel product, amount, image) {
     var index = -1;
@@ -36,6 +43,51 @@ class CartProvider extends ChangeNotifier {
     var tempMerchant = _merchants.toSet().toList();
     _merchants = tempMerchant;
 
+    notifyListeners();
+  }
+
+  removeProduct(index) {
+    var deletedMerchant = _cartProducts[index].merchant;
+    _cartProducts.removeAt(index);
+    bool isEmpty = true;
+    _cartProducts.forEach((product) {
+      if (product.merchant == deletedMerchant) {
+        isEmpty = false;
+      }
+    });
+
+    if (isEmpty) {
+      _merchants.removeWhere((merchant) => merchant == deletedMerchant);
+    }
+
+    notifyListeners();
+  }
+
+  getTotalPrice(merchant) {
+    var totalPrice = 0;
+    var index = 0;
+    _cartProducts.forEach((prod) {
+      if (prod.merchant == merchant) {
+        totalPrice += (prod.harga * amounts[index]);
+      }
+      index++;
+    });
+    return totalPrice;
+  }
+
+  setSelected(merchant) {
+    List<ProductModel> tempList = [];
+    _cartProducts.forEach((prod) {
+      if (prod.merchant == merchant) {
+        tempList.add(prod);
+      }
+    });
+
+    _selectedCarts = tempList;
+    _selectedMerchant = merchant;
+  }
+
+  cartNotifyListeners() {
     notifyListeners();
   }
 }
