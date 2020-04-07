@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kios_agro/providers/auth_provider.dart';
 import 'package:kios_agro/providers/user_provider.dart';
+import 'package:kios_agro/screens/order_screen.dart';
+import 'package:kios_agro/screens/store_screen.dart';
 import 'package:provider/provider.dart';
 import 'account_screen.dart';
 import 'home_screen.dart';
@@ -29,14 +31,14 @@ class _ScreenControlState extends State<ScreenControl> {
 
     var appBarList = [
       HomeAppBar(80.0),
-      HomeAppBar(80.0),
-      HomeAppBar(80.0),
+      StoreAppBar(50.0),
+      OrderAppBar(50.0),
       AccountAppBar(0.0)
     ];
     var ScreenList = [
       HomeScreen(),
-      HomeScreen(),
-      HomeScreen(),
+      StoreScreen(),
+      OrderScreen(),
       AccountScreen(_key, user),
     ];
 

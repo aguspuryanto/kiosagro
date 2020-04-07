@@ -1,9 +1,14 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:kios_agro/main.dart';
 import 'package:kios_agro/providers/cart_provider.dart';
+import 'package:kios_agro/providers/user_provider.dart';
 import 'package:kios_agro/widgets/merchant_product_list.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CheckOutScreen extends StatefulWidget {
   @override
@@ -20,9 +25,72 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   @override
   Widget build(BuildContext context) {
     var cart = Provider.of<CartProvider>(context);
+    var user = Provider.of<UserProvider>(context);
     var cost = cart.selectedCourier;
 
-    print(cart.getTotalWeight(cart.selectedMerchant));
+    launchUrl(url) async {
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'tidak bisa launch $url';
+      }
+    }
+
+    handleSubmit() {
+      var url = 'https://app.sandbox.midtrans.com/snap/v1/transactions';
+      var username = 'SB-Mid-server-uHFIshW8HZ_EsEeylY7mUQYb';
+      var password = '';
+      var basicAuth =
+          'Basic ' + base64Encode(utf8.encode('$username:$password'));
+      var data = {
+        'transaction_details': {
+          "order_id": DateTime.now().toString(),
+          "gross_amount": cart.grossAmount
+        },
+        'credit_card': {'secure': true},
+        'customer_details': {
+          'first_name': user.user.nama,
+          'last_name': user.user.nama,
+          'email': user.user.email,
+          'phone': user.user.telepon,
+        },
+        'billing_address': {
+          'first_name': user.user.nama,
+          'last_name': user.user.nama,
+          'email': user.user.email,
+          'phone': user.user.telepon,
+          'address': user.user.alamat['alamat'],
+          'city': user.user.alamat['kabupaten'],
+          'country_code': 'IDN'
+        },
+        'shipping_address': {
+          'first_name': user.user.nama,
+          'last_name': user.user.nama,
+          'email': user.user.email,
+          'phone': user.user.telepon,
+          'address': user.user.alamat['alamat'],
+          'city': user.user.alamat['kabupaten'],
+          'country_code': 'IDN'
+        }
+      };
+
+      print(basicAuth);
+      print(data);
+      Dio()
+          .post(url,
+              options: Options(headers: {
+                'Authorization': basicAuth,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              }),
+              data: data)
+          .then((value) {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.pop(context);
+        launchUrl(value.data['redirect_url']);
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -126,51 +194,17 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                     SizedBox(
                       height: 10,
                     ),
-                    Text('Ke salah satu rekening berikut:'),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    ListTile(
-                      leading: Image.network(
-                        'https://www.bankmandiri.co.id/image/layout_set_logo?img_id=31567&t=1582304184496',
-                        width: 50,
-                      ),
-                      title: Text(
-                        'Mandiri',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            '131-00-2620202',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            'PT. KIOSAGRO INDONESIA SEJAHTERA',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
                     MaterialButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        handleSubmit();
+                      },
                       color: Colors.green,
-                      minWidth: MediaQuery.of(context).size.width,
+                      minWidth: MediaQuery.of(context).size.width - 100,
                       padding: EdgeInsets.symmetric(
                         vertical: 10,
                       ),
                       child: Text(
-                        'Saya Sudah Membayar',
+                        'Pilih Pembayaran',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,

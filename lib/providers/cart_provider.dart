@@ -14,7 +14,6 @@ class CartProvider extends ChangeNotifier {
   var _selectedCourier;
   var _grossAmount;
 
-  var buyer;
   UserModel _seller;
 
   get cartProducts => _cartProducts;
