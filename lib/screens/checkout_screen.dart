@@ -30,9 +30,6 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
-              Navigator.pop(context);
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => AfterSplash()));
             }),

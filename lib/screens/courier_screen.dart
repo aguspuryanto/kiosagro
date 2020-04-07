@@ -7,12 +7,7 @@ import 'package:kios_agro/providers/user_provider.dart';
 import 'package:kios_agro/screens/checkout_screen.dart';
 import 'package:provider/provider.dart';
 
-class CourierScreen extends StatefulWidget {
-  @override
-  _CourierScreenState createState() => _CourierScreenState();
-}
-
-class _CourierScreenState extends State<CourierScreen> {
+class CourierScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var cart = Provider.of<CartProvider>(context);
@@ -53,14 +48,22 @@ class _CourierScreenState extends State<CourierScreen> {
                   .child('users/${cart.selectedMerchant}')
                   .once()
                   .then((value) {
-                // print(value.value);
+                print(value.value);
                 var seller =
                     UserModel.fromSnapshot(cart.selectedMerchant, value.value);
                 cart.setSeller(seller);
                 return seller;
+              }).catchError((e) {
+                print(e);
               }),
               builder: (context, snapshot) {
-                return CourierList(cart, user.user);
+                if (snapshot.connectionState == ConnectionState.done) {
+                  print('done');
+                  return CourierList(cart, user.user);
+                }
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
               },
             ),
           ],

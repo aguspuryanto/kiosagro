@@ -44,12 +44,9 @@ class _ProductCardState extends State<ProductCard> {
                         .getDownloadURL()
                         .then((value) => value)
                         .catchError((e) {
-                      print('error coi');
+                      // print('error coi');
                     }),
                     builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        print('error');
-                      }
                       if (snapshot.connectionState == ConnectionState.done) {
                         if (snapshot.hasError) {
                           print('ada error');

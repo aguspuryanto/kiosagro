@@ -101,7 +101,7 @@ class CartProvider extends ChangeNotifier {
     return totalWeight;
   }
 
-  setSelected(merchant) async {
+  setSelected(merchant) {
     List<ProductModel> tempList = [];
     _cartProducts.forEach((prod) {
       if (prod.merchant == merchant) {
@@ -113,7 +113,7 @@ class CartProvider extends ChangeNotifier {
     _selectedMerchant = merchant;
   }
 
-  setSeller(userSeller) async {
+  setSeller(userSeller) {
     _seller = userSeller;
   }
 
