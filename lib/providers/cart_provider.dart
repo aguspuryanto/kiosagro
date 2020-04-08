@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:kios_agro/models/product_model.dart';
@@ -13,6 +15,7 @@ class CartProvider extends ChangeNotifier {
   var _selectedMerchant = '';
   var _selectedCourier;
   var _grossAmount;
+  var _unique;
 
   UserModel _seller;
 
@@ -33,6 +36,8 @@ class CartProvider extends ChangeNotifier {
   get seller => _seller;
 
   get grossAmount => _grossAmount;
+
+  get unique => _unique;
 
   addProduct(ProductModel product, amount, image) {
     var index = -1;
@@ -121,6 +126,38 @@ class CartProvider extends ChangeNotifier {
     print(courier);
     _grossAmount =
         getTotalPrice(_selectedMerchant) + courier['cost'][0]['value'];
+
+    Random random = new Random();
+    int randomNumber = random.nextInt(1000);
+    _unique = randomNumber;
+    _grossAmount += _unique;
+  }
+
+  clearSelectedCart() {
+    List<ProductModel> tempListCart = [];
+    var tempListAmount = [];
+    var tempListMerchant = [];
+
+    var index = 0;
+
+    _cartProducts.forEach((prod) {
+      if (prod.merchant != selectedMerchant) {
+        tempListCart.add(prod);
+        tempListAmount.add(_amounts[index]);
+      }
+      index++;
+    });
+
+    _merchants.forEach((merchant) {
+      if (merchant != _selectedMerchant) {
+        tempListMerchant.add(merchant);
+      }
+    });
+
+    _cartProducts = tempListCart;
+    _amounts = tempListAmount;
+    _merchants = tempListMerchant;
+    notifyListeners();
   }
 
   cartNotifyListeners() {

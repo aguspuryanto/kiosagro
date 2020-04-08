@@ -36,7 +36,67 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
       }
     }
 
-    handleSubmit() {
+    handleSubmit() async {
+      var index = -1;
+
+      var itemDetails = cart.cartProducts.map((prod) {
+        index++;
+        if (prod.merchant == cart.selectedMerchant) {
+          return {
+            'id': prod.key,
+            'title': prod.name,
+            'image': prod.images,
+            'price': prod.harga,
+            'quantity': cart.amounts[index]
+          };
+        }
+      }).toList();
+
+      itemDetails.add({
+        'id': cost['code'],
+        'title': '${cost['code']} - ${cost['service']}',
+        'image': '',
+        'price': cost['cost'][0]['value'],
+        'quantity': 1,
+      });
+
+      print(itemDetails);
+
+      var orders = {
+        'alamat': user.user.alamat,
+        'buyer_id': user.user.key,
+        'buyer_name': user.user.nama,
+        'ekspedisi': cost['code'],
+        'gross_amount': cart.grossAmount,
+        'item_details': itemDetails,
+        'resi': '',
+        'seller_id': cart.seller.key,
+        'seller_name': cart.seller.namatoko,
+        'status': 'pending',
+        'telepon': user.user.telepon,
+        'time': DateTime.now().toString(),
+        'unique': cart.unique
+      };
+
+      // print(orders);
+
+      var ref = FirebaseDatabase.instance.reference().child('/orders').push();
+
+      // print(ref.key);
+      ref.set(orders);
+
+      FirebaseDatabase.instance
+          .reference()
+          .child('/users/${user.user.key}/orders/buyer/')
+          .push()
+          .set(orders);
+
+      // FirebaseDatabase.instance
+      //     .reference()
+      //     .child('/users/${cart.seller.key}/orders/seller/')
+      //     .push()
+      //     .set(orders);
+
       var url = 'https://app.sandbox.midtrans.com/snap/v1/transactions';
       var username = 'SB-Mid-server-uHFIshW8HZ_EsEeylY7mUQYb';
       var password = '';
@@ -44,7 +104,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
           'Basic ' + base64Encode(utf8.encode('$username:$password'));
       var data = {
         'transaction_details': {
-          "order_id": DateTime.now().toString(),
+          "order_id": ref.key,
           "gross_amount": cart.grossAmount
         },
         'credit_card': {'secure': true},
@@ -74,8 +134,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
         }
       };
 
-      print(basicAuth);
-      print(data);
+      // print(basicAuth);
+      // print(data);
       Dio()
           .post(url,
               options: Options(headers: {
@@ -85,6 +145,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
               }),
               data: data)
           .then((value) {
+        cart.clearSelectedCart();
         Navigator.pop(context);
         Navigator.pop(context);
         Navigator.pop(context);
@@ -171,6 +232,10 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                             ),
                           ],
                         ),
+                      ),
+                      ListTile(
+                        title: Text('Total: ${cart.grossAmount - cart.unique}'),
+                        subtitle: Text('kode unik: ${cart.unique}'),
                       ),
                     ],
                   ),

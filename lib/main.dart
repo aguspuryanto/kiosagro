@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kios_agro/providers/cart_provider.dart';
 import 'package:kios_agro/providers/product_provider.dart';
 import 'package:kios_agro/providers/user_provider.dart';
-import 'package:kios_agro/screens/checkout_screen.dart';
 import 'package:kios_agro/screens/login_screen.dart';
 import 'package:kios_agro/screens/register_screen.dart';
 import 'package:kios_agro/screens/screen_control.dart';

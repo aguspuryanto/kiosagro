@@ -1,14 +1,4 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:kios_agro/models/product_model.dart';
-import 'package:kios_agro/providers/cart_provider.dart';
-import 'package:kios_agro/providers/product_provider.dart';
-import 'package:kios_agro/screens/cart_detail_screen.dart';
-import 'package:kios_agro/screens/category_product_screen.dart';
-import 'package:kios_agro/screens/search_screen.dart';
-import 'package:kios_agro/widgets/product_card.dart';
-import 'package:provider/provider.dart';
 
 class StoreAppBar extends StatelessWidget implements PreferredSizeWidget {
   final _height;
