@@ -91,6 +91,12 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
           .push()
           .set(orders);
 
+      FirebaseDatabase.instance
+          .reference()
+          .child('/users/${cart.selectedMerchant}/orders/seller/')
+          .push()
+          .set(orders);
+
       // FirebaseDatabase.instance
       //     .reference()
       //     .child('/users/${cart.seller.key}/orders/seller/')
@@ -146,6 +152,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
               data: data)
           .then((value) {
         cart.clearSelectedCart();
+        user.getUserData(user.user.key);
         Navigator.pop(context);
         Navigator.pop(context);
         Navigator.pop(context);
@@ -198,14 +205,41 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                             builder: (context) {
                               switch (cost['code'].toLowerCase()) {
                                 case 'jne':
-                                  return Image.asset('jne.jpg',
-                                      fit: BoxFit.fill);
+                                  return Image.asset(
+                                    'jne.jpg',
+                                    fit: BoxFit.fill,
+                                  );
                                   break;
                                 case 'j&t':
                                   return Image.asset(
                                     'jnt.jpg',
                                     fit: BoxFit.fill,
                                   );
+                                  break;
+                                case 'tiki':
+                                  return Image.asset(
+                                    'tiki.jpg',
+                                    fit: BoxFit.fill,
+                                  );
+                                  break;
+                                case 'pos':
+                                  return Image.asset(
+                                    'pos.jpg',
+                                    fit: BoxFit.fill,
+                                  );
+                                  break;
+                                case 'lion':
+                                  return Image.asset(
+                                    'lion.jpg',
+                                    fit: BoxFit.fill,
+                                  );
+                                  break;
+                                case 'sicepat':
+                                  return Image.asset(
+                                    'sicepat.jpg',
+                                    fit: BoxFit.fill,
+                                  );
+                                  break;
                                 default:
                                   return Icon(Icons.image);
                               }

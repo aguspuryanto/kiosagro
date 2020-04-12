@@ -38,13 +38,15 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
       var user = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
+
+      _user = user.user;
       if (user.user == null) {
         _status = Status.Unauthenticated;
         notifyListeners();
         return false;
+      } else {
+        return true;
       }
-
-      return true;
     } catch (e) {
       _status = Status.Unauthenticated;
       notifyListeners();
@@ -209,6 +211,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> _onAuthStateChanged(FirebaseUser firebaseUser) async {
+    print(firebaseUser.displayName);
     if (firebaseUser == null) {
       _status = Status.Unauthenticated;
     } else {

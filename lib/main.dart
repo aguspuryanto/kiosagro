@@ -55,6 +55,10 @@ class AfterSplash extends StatelessWidget {
     var auth = Provider.of<AuthProvider>(context);
     var user = Provider.of<UserProvider>(context);
 
+    // try {
+    //   user.getUserData(auth.user.uid);
+    // } catch (e) {}
+
     return Consumer(
       builder: (context, AuthProvider auth, _) {
         switch (auth.status) {
@@ -67,7 +71,6 @@ class AfterSplash extends StatelessWidget {
             break;
           case Status.Authenticated:
             user.getUserData(auth.user.uid);
-
             return ScreenControl();
             break;
         }

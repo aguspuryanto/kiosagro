@@ -51,6 +51,10 @@ class _AccountScreenState extends State<AccountScreen> {
   var _urlToko = 'dibuat otomatis setelah generate';
 
   bool jne = false;
+  bool jnt = false;
+  bool lion = false;
+  bool pos = false;
+  bool sicepat = false;
   bool tiki = false;
   bool upgrade = false;
 
@@ -144,11 +148,27 @@ class _AccountScreenState extends State<AccountScreen> {
         _namaHolder.text = widget._user.user.holder;
       }
 
-      if (user.user.pengiriman.contains('jne')) {
+      if (user.user.pengiriman.toLowerCase().contains('jne')) {
         jne = true;
       }
 
-      if (user.user.pengiriman.contains('tiki')) {
+      if (user.user.pengiriman.toLowerCase().contains('jnt')) {
+        jnt = true;
+      }
+
+      if (user.user.pengiriman.toLowerCase().contains('lion')) {
+        lion = true;
+      }
+
+      if (user.user.pengiriman.toLowerCase().contains('pos')) {
+        pos = true;
+      }
+
+      if (user.user.pengiriman.toLowerCase().contains('sicepat')) {
+        sicepat = true;
+      }
+
+      if (user.user.pengiriman.toLowerCase().contains('tiki')) {
         tiki = true;
       }
     });
@@ -225,6 +245,7 @@ class _AccountScreenState extends State<AccountScreen> {
         });
       }
     });
+
     if (isReady == true)
       return false;
     else
@@ -234,6 +255,10 @@ class _AccountScreenState extends State<AccountScreen> {
   handleSubmit() async {
     var kurir = '';
     if (jne == true) kurir = 'jne:$kurir';
+    if (jnt == true) kurir = 'jnt:$kurir';
+    if (pos == true) kurir = 'pos:$kurir';
+    if (sicepat == true) kurir = 'sicepat:$kurir';
+    if (lion == true) kurir = 'lion:$kurir';
     if (tiki == true) kurir = 'tiki:$kurir';
 
     var _provinsiName = '';
@@ -559,6 +584,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                               ),
                                             );
                                           } else {
+                                            user.getUserData(user.user.key);
                                             widget._key.currentState
                                                 .showSnackBar(
                                               SnackBar(
@@ -687,7 +713,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                       height: 50,
                                       width: 100,
                                       child: Image.network(
-                                          'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2F4.bp.blogspot.com%2F-aSIrvq-O52s%2FUTUKkn-NY0I%2FAAAAAAAAACY%2F7ekOHtjLWw8%2Fs1600%2FLogo%2BJNE.JPG&f=1&nofb=1',
+                                          'https://firebasestorage.googleapis.com/v0/b/projectflutter-9b7b1.appspot.com/o/cms%2Fjne.png?alt=media&token=08b22e03-5022-4f41-9b81-03e2c887c503',
                                           fit: BoxFit.fill),
                                     ),
                                     SizedBox(
@@ -695,6 +721,130 @@ class _AccountScreenState extends State<AccountScreen> {
                                     ),
                                     Text(
                                       'JNE',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              CheckboxListTile(
+                                value: jne,
+                                onChanged: (val) {
+                                  setState(() {
+                                    jne = val;
+                                  });
+                                },
+                                title: Row(
+                                  children: <Widget>[
+                                    Container(
+                                      height: 50,
+                                      width: 100,
+                                      child: Image.network(
+                                          'https://firebasestorage.googleapis.com/v0/b/projectflutter-9b7b1.appspot.com/o/cms%2Fjnt.jpeg?alt=media&token=1de13921-1da4-4eb0-a4c9-502637f638e0',
+                                          fit: BoxFit.fill),
+                                    ),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Text(
+                                      'JNT',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              CheckboxListTile(
+                                value: jne,
+                                onChanged: (val) {
+                                  setState(() {
+                                    jne = val;
+                                  });
+                                },
+                                title: Row(
+                                  children: <Widget>[
+                                    Container(
+                                      height: 50,
+                                      width: 100,
+                                      child: Image.network(
+                                          'https://firebasestorage.googleapis.com/v0/b/projectflutter-9b7b1.appspot.com/o/cms%2Flion.jpeg?alt=media&token=ba29ebcd-70ce-4c96-8865-539213a1e0be',
+                                          fit: BoxFit.fill),
+                                    ),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Text(
+                                      'LION',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              CheckboxListTile(
+                                value: jne,
+                                onChanged: (val) {
+                                  setState(() {
+                                    jne = val;
+                                  });
+                                },
+                                title: Row(
+                                  children: <Widget>[
+                                    Container(
+                                      height: 50,
+                                      width: 100,
+                                      child: Image.network(
+                                          'https://firebasestorage.googleapis.com/v0/b/projectflutter-9b7b1.appspot.com/o/cms%2Fpos.png?alt=media&token=3b58917e-2afe-4e37-87ed-e72c1595a4c1',
+                                          fit: BoxFit.fill),
+                                    ),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Text(
+                                      'POS',
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              CheckboxListTile(
+                                value: jne,
+                                onChanged: (val) {
+                                  setState(() {
+                                    jne = val;
+                                  });
+                                },
+                                title: Row(
+                                  children: <Widget>[
+                                    Container(
+                                      height: 50,
+                                      width: 100,
+                                      child: Image.network(
+                                          'https://firebasestorage.googleapis.com/v0/b/projectflutter-9b7b1.appspot.com/o/cms%2Fsicepat.jpeg?alt=media&token=64c07834-1333-4b9b-8349-29444445ca18',
+                                          fit: BoxFit.fill),
+                                    ),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Text(
+                                      'SICEPAT',
                                       style: TextStyle(
                                         fontSize: 20,
                                       ),
@@ -718,7 +868,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                       height: 50,
                                       width: 100,
                                       child: Image.network(
-                                        'https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2F2.bp.blogspot.com%2F-4_rZJk1uI6k%2FUTUH2D_NaCI%2FAAAAAAAAAB4%2FbQ9befjlAxo%2Fs1600%2FLogo%2BTiki.JPG&f=1&nofb=1',
+                                        'https://firebasestorage.googleapis.com/v0/b/projectflutter-9b7b1.appspot.com/o/cms%2Ftiki.jpeg?alt=media&token=46d6ba10-eb0d-413e-aa1e-820e6d0d1dff',
                                         fit: BoxFit.fill,
                                       ),
                                     ),

@@ -17,6 +17,7 @@ class UserProvider extends ChangeNotifier {
         .then((value) {
       _user = UserModel.fromSnapshot(value.key, value.value);
     });
+    notifyListeners();
   }
 
   updateData(accountData) async {

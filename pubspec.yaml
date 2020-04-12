@@ -23,6 +23,8 @@ dependencies:
   carousel_slider: ^1.4.1
   splashscreen: ^1.2.0
   url_launcher: ^5.4.2
+  image_picker: ^0.6.4
+  intl: ^0.16.1
 
 dev_dependencies:
   flutter_test:
@@ -37,3 +39,7 @@ flutter:
     - bg_login.png
     - jne.jpg
     - jnt.jpg
+    - tiki.jpg
+    - lion.jpg
+    - pos.jpg
+    - sicepat.jpg

@@ -104,9 +104,14 @@ class _CourierListState extends State<CourierList> {
 
   getCost() async {
     var listJneCost = await getJneCost();
+    var listTikiCost = await getTikiCost();
     var listJntCost = await getJntCost();
+    var listSicepatCost = await getSicepatCost();
+    var listLionCost = await getLionCost();
+    var listPosCost = await getPosCost();
+
     setState(() {
-      listCost = [...listJneCost, ...listJntCost];
+      listCost = [...listJneCost, ...listJntCost, ...listTikiCost];
     });
   }
 
@@ -128,6 +133,138 @@ class _CourierListState extends State<CourierList> {
           'destinationType': 'subdistrict',
           'weight': '${widget.cart.getTotalWeight(seller.key)}',
           'courier': 'jne'
+        }).then((value) {
+      // print(value.data);
+      var data = value.data['rajaongkir']['results'][0]['costs'];
+      var code = value.data['rajaongkir']['results'][0]['code'];
+      data.forEach((cost) {
+        cost['code'] = code;
+        tempList.add(cost);
+      });
+    }).catchError((e) {
+      print(e);
+    });
+
+    return tempList;
+  }
+
+  getLionCost() async {
+    var tempList = [];
+
+    await Dio().post('https://pro.rajaongkir.com/api/cost',
+        options: Options(
+          headers: {
+            'key': 'eb9420bd896a4915739f4d8bc1e6ba13',
+          },
+        ),
+        data: {
+          'origin':
+              '${seller.alamat['id'].replaceAll(new RegExp(r'[^\w\s]+'), '')}',
+          'originType': 'subdistrict',
+          'destination':
+              '${buyer.alamat['id'].replaceAll(new RegExp(r'[^\w\s]+'), '')}',
+          'destinationType': 'subdistrict',
+          'weight': '${widget.cart.getTotalWeight(seller.key)}',
+          'courier': 'lion'
+        }).then((value) {
+      // print(value.data);
+      var data = value.data['rajaongkir']['results'][0]['costs'];
+      var code = value.data['rajaongkir']['results'][0]['code'];
+      data.forEach((cost) {
+        cost['code'] = code;
+        tempList.add(cost);
+      });
+    }).catchError((e) {
+      print(e);
+    });
+
+    return tempList;
+  }
+
+  getSicepatCost() async {
+    var tempList = [];
+
+    await Dio().post('https://pro.rajaongkir.com/api/cost',
+        options: Options(
+          headers: {
+            'key': 'eb9420bd896a4915739f4d8bc1e6ba13',
+          },
+        ),
+        data: {
+          'origin':
+              '${seller.alamat['id'].replaceAll(new RegExp(r'[^\w\s]+'), '')}',
+          'originType': 'subdistrict',
+          'destination':
+              '${buyer.alamat['id'].replaceAll(new RegExp(r'[^\w\s]+'), '')}',
+          'destinationType': 'subdistrict',
+          'weight': '${widget.cart.getTotalWeight(seller.key)}',
+          'courier': 'sicepat'
+        }).then((value) {
+      // print(value.data);
+      var data = value.data['rajaongkir']['results'][0]['costs'];
+      var code = value.data['rajaongkir']['results'][0]['code'];
+      data.forEach((cost) {
+        cost['code'] = code;
+        tempList.add(cost);
+      });
+    }).catchError((e) {
+      print(e);
+    });
+
+    return tempList;
+  }
+
+  getPosCost() async {
+    var tempList = [];
+
+    await Dio().post('https://pro.rajaongkir.com/api/cost',
+        options: Options(
+          headers: {
+            'key': 'eb9420bd896a4915739f4d8bc1e6ba13',
+          },
+        ),
+        data: {
+          'origin':
+              '${seller.alamat['id'].replaceAll(new RegExp(r'[^\w\s]+'), '')}',
+          'originType': 'subdistrict',
+          'destination':
+              '${buyer.alamat['id'].replaceAll(new RegExp(r'[^\w\s]+'), '')}',
+          'destinationType': 'subdistrict',
+          'weight': '${widget.cart.getTotalWeight(seller.key)}',
+          'courier': 'pos'
+        }).then((value) {
+      // print(value.data);
+      var data = value.data['rajaongkir']['results'][0]['costs'];
+      var code = value.data['rajaongkir']['results'][0]['code'];
+      data.forEach((cost) {
+        cost['code'] = code;
+        tempList.add(cost);
+      });
+    }).catchError((e) {
+      print(e);
+    });
+
+    return tempList;
+  }
+
+  getTikiCost() async {
+    var tempList = [];
+
+    await Dio().post('https://pro.rajaongkir.com/api/cost',
+        options: Options(
+          headers: {
+            'key': 'eb9420bd896a4915739f4d8bc1e6ba13',
+          },
+        ),
+        data: {
+          'origin':
+              '${seller.alamat['id'].replaceAll(new RegExp(r'[^\w\s]+'), '')}',
+          'originType': 'subdistrict',
+          'destination':
+              '${buyer.alamat['id'].replaceAll(new RegExp(r'[^\w\s]+'), '')}',
+          'destinationType': 'subdistrict',
+          'weight': '${widget.cart.getTotalWeight(seller.key)}',
+          'courier': 'tiki'
         }).then((value) {
       // print(value.data);
       var data = value.data['rajaongkir']['results'][0]['costs'];
@@ -178,6 +315,8 @@ class _CourierListState extends State<CourierList> {
 
   @override
   Widget build(BuildContext context) {
+    print(listCost);
+
     return (listCost.length == 0
         ? Center(child: CircularProgressIndicator())
         : ListCost(listCost));
@@ -220,13 +359,41 @@ class _ListCostState extends State<ListCost> {
               builder: (context) {
                 switch (cost['code'].toLowerCase()) {
                   case 'jne':
-                    return Image.asset('jne.jpg', fit: BoxFit.fill);
+                    return Image.asset(
+                      'jne.jpg',
+                      fit: BoxFit.fill,
+                    );
                     break;
                   case 'j&t':
                     return Image.asset(
                       'jnt.jpg',
                       fit: BoxFit.fill,
                     );
+                    break;
+                  case 'tiki':
+                    return Image.asset(
+                      'tiki.jpg',
+                      fit: BoxFit.fill,
+                    );
+                    break;
+                  case 'pos':
+                    return Image.asset(
+                      'pos.jpg',
+                      fit: BoxFit.fill,
+                    );
+                    break;
+                  case 'lion':
+                    return Image.asset(
+                      'lion.jpg',
+                      fit: BoxFit.fill,
+                    );
+                    break;
+                  case 'sicepat':
+                    return Image.asset(
+                      'sicepat.jpg',
+                      fit: BoxFit.fill,
+                    );
+                    break;
                   default:
                     return Icon(Icons.image);
                 }

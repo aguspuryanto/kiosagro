@@ -27,6 +27,7 @@ class _ProductCardState extends State<ProductCard> {
                     DetailProductScreen(widget.product, image)));
       },
       child: Container(
+        width: MediaQuery.of(context).size.width / 3,
         child: Card(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,7 +35,6 @@ class _ProductCardState extends State<ProductCard> {
               Container(
                 height: MediaQuery.of(context).size.height / 5 - 40,
                 margin: EdgeInsets.all(10),
-                width: MediaQuery.of(context).size.width / 2 - 40,
                 child: Center(
                   child: FutureBuilder(
                     future: FirebaseStorage.instance
@@ -93,14 +93,18 @@ class _ProductCardState extends State<ProductCard> {
                 padding: EdgeInsets.only(left: 8, right: 8, bottom: 8),
                 child: Text(
                   widget.product.kota,
-                  style: TextStyle(),
+                  style: TextStyle(
+                    color: Colors.green,
+                  ),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.only(left: 8, right: 8, bottom: 8),
                 child: Text(
                   'Rp ${widget.product.harga}',
-                  style: TextStyle(),
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
                 ),
               ),
             ],

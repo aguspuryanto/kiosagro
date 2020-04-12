@@ -132,7 +132,6 @@ class _PembeliContentState extends State<PembeliContent> {
 
   @override
   Widget build(BuildContext context) {
-    print(orderList);
     return (orderList.length == 0
         ? Center(
             child: Text('Tidak ada pesanan'),
@@ -175,14 +174,13 @@ class _PenjualContentState extends State<PenjualContent> {
 
   @override
   Widget build(BuildContext context) {
-    print(orderList);
     return (orderList.length == 0
         ? Center(
             child: Text('Tidak ada pesanan'),
           )
         : Column(
             children: orderList.map<Widget>((order) {
-              return OrderWidget(order);
+              return OrderWidgetPenjual(order);
             }).toList(),
           ));
   }
@@ -225,6 +223,91 @@ class OrderWidget extends StatelessWidget {
           ListTile(
             title: Text('Status'),
             subtitle: Text('Belum dikirim'),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class OrderWidgetPenjual extends StatelessWidget {
+  var order;
+  OrderWidgetPenjual(this.order);
+
+  @override
+  Widget build(BuildContext context) {
+    Future<void> inputResiDialog() async {
+      print(order);
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Masukkan Nomor Resi'),
+            content: TextFormField(
+              textAlign: TextAlign.center,
+              decoration: InputDecoration(
+                labelText: 'Nomor Resi',
+                enabledBorder: OutlineInputBorder(),
+                focusedBorder: OutlineInputBorder(),
+              ),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Regret'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+    return Container(
+      margin: EdgeInsets.symmetric(
+        vertical: 10,
+        horizontal: 10,
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.green),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          ListTile(
+            title: Text('Toko: ${order['seller_name']}'),
+          ),
+          Column(
+            children: order['item_details'].map<Widget>((item) {
+              return ListTile(
+                title: Text(item['title']),
+                subtitle: Text('${item['quantity'].toString()}x'),
+                trailing: Text('Rp ${item['price']}'),
+              );
+            }).toList(),
+          ),
+          ListTile(
+            title: Text('Total: Rp ${order['gross_amount']}'),
+            subtitle: Text('Kode unik: ${order['unique']}'),
+          ),
+          Divider(),
+          ListTile(
+            title: Text('Status'),
+            subtitle: Text(order['status']),
+            trailing: MaterialButton(
+              onPressed: () {
+                inputResiDialog();
+              },
+              color: Colors.green,
+              child: Text(
+                'Input Resi',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
           )
         ],
       ),

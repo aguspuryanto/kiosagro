@@ -119,27 +119,36 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
               ),
               child: MaterialButton(
                 onPressed: () {
-                  if (_total != 0) {
-                    print(checkIsComplete());
-                    if (checkIsComplete() == true) {
-                      handleSubmit();
-                      successDialog();
+                  if (user.key == widget.product.merchant) {
+                    _key.currentState.showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.red,
+                        content: Text('Tidak boleh membeli produk sendiri'),
+                      ),
+                    );
+                  } else {
+                    if (_total != 0) {
+                      print(checkIsComplete());
+                      if (checkIsComplete() == true) {
+                        handleSubmit();
+                        successDialog();
+                      } else {
+                        _key.currentState.showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text(
+                                'Lengkapi akun pembeli anda terlebih dahulu'),
+                          ),
+                        );
+                      }
                     } else {
                       _key.currentState.showSnackBar(
                         SnackBar(
                           backgroundColor: Colors.red,
-                          content: Text(
-                              'Lengkapi akun pembeli anda terlebih dahulu'),
+                          content: Text('Jumlah produk tidak boleh kosong'),
                         ),
                       );
                     }
-                  } else {
-                    _key.currentState.showSnackBar(
-                      SnackBar(
-                        backgroundColor: Colors.red,
-                        content: Text('Jumlah produk tidak boleh kosong'),
-                      ),
-                    );
                   }
                 },
                 color: Colors.redAccent,
