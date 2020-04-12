@@ -33,7 +33,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   var _kategori;
 
-  var listCategory = ['Peternakan', 'Perkebunan'];
+  var listCategory = [
+    'Pertanian',
+    'Peternakan',
+    'Perikanan',
+    'Perkebunan',
+    'Kelatuan',
+    'Hasil Olahan',
+    'Papukbesbat',
+    'Alat Bantu Usaha'
+  ];
 
   var dbRef = FirebaseDatabase.instance.reference().child('/products').push();
   var storageRef = FirebaseStorage.instance.ref();

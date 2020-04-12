@@ -273,7 +273,7 @@ class PopularListProducts extends StatelessWidget {
     });
     var index = 0;
     return Container(
-      height: 230,
+      height: MediaQuery.of(context).size.height / 3 - 20,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: sortedProducts.map<Widget>((prod) {

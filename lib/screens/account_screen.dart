@@ -732,10 +732,10 @@ class _AccountScreenState extends State<AccountScreen> {
                                 height: 20,
                               ),
                               CheckboxListTile(
-                                value: jne,
+                                value: jnt,
                                 onChanged: (val) {
                                   setState(() {
-                                    jne = val;
+                                    jnt = val;
                                   });
                                 },
                                 title: Row(
@@ -763,10 +763,10 @@ class _AccountScreenState extends State<AccountScreen> {
                                 height: 20,
                               ),
                               CheckboxListTile(
-                                value: jne,
+                                value: lion,
                                 onChanged: (val) {
                                   setState(() {
-                                    jne = val;
+                                    lion = val;
                                   });
                                 },
                                 title: Row(
@@ -794,10 +794,10 @@ class _AccountScreenState extends State<AccountScreen> {
                                 height: 20,
                               ),
                               CheckboxListTile(
-                                value: jne,
+                                value: pos,
                                 onChanged: (val) {
                                   setState(() {
-                                    jne = val;
+                                    pos = val;
                                   });
                                 },
                                 title: Row(
@@ -825,10 +825,10 @@ class _AccountScreenState extends State<AccountScreen> {
                                 height: 20,
                               ),
                               CheckboxListTile(
-                                value: jne,
+                                value: sicepat,
                                 onChanged: (val) {
                                   setState(() {
-                                    jne = val;
+                                    sicepat = val;
                                   });
                                 },
                                 title: Row(

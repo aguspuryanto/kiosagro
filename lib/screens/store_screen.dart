@@ -112,64 +112,75 @@ class _ProductListState extends State<ProductList> {
     return Wrap(
       children: listProduct.map<Widget>((product) {
         print(product);
-        return ListTile(
-          isThreeLine: true,
-          leading: Container(
-            width: 75,
-            height: 50,
-            child: Image.network(
-              product['Image'][0],
-              fit: BoxFit.fill,
+        return Container(
+          margin: EdgeInsets.symmetric(
+            horizontal: 10,
+            vertical: 10,
+          ),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.green,
             ),
           ),
-          title: Text(product['Name']),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                product['Deskripsi'].toString(),
-                overflow: TextOverflow.ellipsis,
+          child: ListTile(
+            isThreeLine: true,
+            leading: Container(
+              width: 75,
+              height: 50,
+              child: Image.network(
+                product['Image'][0],
+                fit: BoxFit.fill,
               ),
-              Text('Rp ${product['Harga'].toString()}'),
-            ],
-          ),
-          trailing: IconButton(
-            onPressed: () {
-              print(product['SKU']);
-              FirebaseDatabase.instance
-                  .reference()
-                  .child('/products/${product['SKU']}')
-                  .remove()
-                  .then((value) => print('deleted'));
+            ),
+            title: Text(product['Name']),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  product['Deskripsi'].toString(),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text('Rp ${product['Harga'].toString()}'),
+              ],
+            ),
+            trailing: IconButton(
+              onPressed: () {
+                print(product['SKU']);
+                FirebaseDatabase.instance
+                    .reference()
+                    .child('/products/${product['SKU']}')
+                    .remove()
+                    .then((value) => print('deleted'));
 
-              FirebaseDatabase.instance
-                  .reference()
-                  .child(
-                      '/users/${product['Merchant']}/products/${product['SKU']}')
-                  .remove()
-                  .then((value) => print('deleted from user'));
+                FirebaseDatabase.instance
+                    .reference()
+                    .child(
+                        '/users/${product['Merchant']}/products/${product['SKU']}')
+                    .remove()
+                    .then((value) => print('deleted from user'));
 
-              FirebaseStorage.instance
-                  .ref()
-                  .child('/products/${product['SKU']}/1.jpeg')
-                  .delete()
-                  .then((value) {
-                print('deleted storage');
-              });
+                FirebaseStorage.instance
+                    .ref()
+                    .child('/products/${product['SKU']}/1.jpeg')
+                    .delete()
+                    .then((value) {
+                  print('deleted storage');
+                });
 
-              var tempList = [];
-              listProduct.forEach((prod) {
-                if (prod['SKU'] != product['SKU']) {
-                  tempList.add(prod);
-                }
-              });
-              setState(() {
-                listProduct = tempList;
-              });
-            },
-            icon: Icon(
-              Icons.delete,
-              color: Colors.red,
+                var tempList = [];
+                listProduct.forEach((prod) {
+                  if (prod['SKU'] != product['SKU']) {
+                    tempList.add(prod);
+                  }
+                });
+                setState(() {
+                  listProduct = tempList;
+                });
+              },
+              icon: Icon(
+                Icons.delete,
+                color: Colors.red,
+              ),
             ),
           ),
         );
