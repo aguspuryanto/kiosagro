@@ -186,7 +186,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    'Rp 10000',
+                    'Rp ${widget.product.harga}',
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,

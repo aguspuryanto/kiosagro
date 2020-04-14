@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:kios_agro/models/product_model.dart';
@@ -52,8 +53,8 @@ class _ProductCardState extends State<ProductCard> {
                           print('ada error');
                         }
                         if (snapshot.hasData) {
-                          image = Image.network(
-                            snapshot.data,
+                          image = CachedNetworkImage(
+                            imageUrl: snapshot.data,
                             fit: BoxFit.fill,
                           );
                           return image;

@@ -18,7 +18,7 @@ class CategoryProductScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Container(
             margin: EdgeInsets.symmetric(vertical: 20),
-            child: Center(child: ListProducts(_title)),
+            child: ListProducts(_title),
           ),
         ),
       ),
@@ -39,6 +39,8 @@ class ListProducts extends StatelessWidget {
     });
     var index = 0;
     return Wrap(
+      alignment: WrapAlignment.start,
+      crossAxisAlignment: WrapCrossAlignment.start,
       children: sortedProducts.map<Widget>((prod) {
         if (prod.category.contains(_title) && index < 20) {
           index++;
