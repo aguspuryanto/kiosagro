@@ -149,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                PopularListProducts(products: products),
+                PopularListProducts(),
                 Padding(
                   padding: EdgeInsets.all(20),
                   child: Text(
@@ -159,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                NewListProducts(products: products)
+                NewListProducts()
               ],
             ),
           );
@@ -259,15 +259,10 @@ class _BannerSliderState extends State<BannerSlider> {
 }
 
 class PopularListProducts extends StatelessWidget {
-  const PopularListProducts({
-    Key key,
-    @required this.products,
-  }) : super(key: key);
-
-  final ProductProvider products;
-
   @override
   Widget build(BuildContext context) {
+    var products = Provider.of<ProductProvider>(context);
+
     return Container(
       height: MediaQuery.of(context).size.height / 3 - 20,
       child: ListView(
@@ -281,13 +276,6 @@ class PopularListProducts extends StatelessWidget {
 }
 
 class NewListProducts extends StatelessWidget {
-  const NewListProducts({
-    Key key,
-    @required this.products,
-  }) : super(key: key);
-
-  final ProductProvider products;
-
   @override
   Widget build(BuildContext context) {
     var products = Provider.of<ProductProvider>(context);

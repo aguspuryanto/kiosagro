@@ -31,8 +31,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
   List<File> _images;
   List _imagesUrl;
 
-  var _kategori;
-
   var listCategory = [
     'Pertanian',
     'Peternakan',
@@ -44,6 +42,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
     'Alat Bantu Usaha'
   ];
 
+  var listUnit = ['Gram', 'Kilogram'];
+
+  var _kategori;
+  var _unit;
+
   var dbRef = FirebaseDatabase.instance.reference().child('/products').push();
   var storageRef = FirebaseStorage.instance.ref();
 
@@ -51,6 +54,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    _kategori = listCategory[0];
+    _unit = listUnit[0];
 
     _nama = TextEditingController(text: '');
     _deskripsi = TextEditingController(text: '');
@@ -62,6 +68,69 @@ class _AddProductScreenState extends State<AddProductScreen> {
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<UserProvider>(context);
+
+    Future getImageFromCamera() async {
+      var image = await ImagePicker.pickImage(source: ImageSource.camera);
+
+      setState(() {
+        _images.add(image);
+      });
+    }
+
+    Future getImageFromGallery() async {
+      var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+      setState(() {
+        _images.add(image);
+      });
+    }
+
+    Future<void> getImageDialog() async {
+      return showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Column(
+              children: <Widget>[
+                Text('Pilih Metode Pengambilan'),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    MaterialButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        getImageFromCamera();
+                      },
+                      child: Column(
+                        children: <Widget>[
+                          Icon(Icons.camera),
+                          Text('Kamera'),
+                        ],
+                      ),
+                    ),
+                    MaterialButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        getImageFromGallery();
+                      },
+                      child: Column(
+                        children: <Widget>[
+                          Icon(Icons.image),
+                          Text('Galeri'),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
 
     Future uploadImage(_image) async {
       var imageUrl = '';
@@ -77,14 +146,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
         imageUrl = value;
       });
       return imageUrl;
-    }
-
-    Future getImage() async {
-      var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-      setState(() {
-        _images.add(image);
-      });
     }
 
     handleSubmit() async {
@@ -117,7 +178,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
         'Priority': 0,
         'Rating': 0,
         'SKU': sku,
-        'Unit': 'gram',
+        'Unit': _unit,
         'Update':
             DateFormat('yyyyMMddHHmmss').format(DateTime.now()).toString(),
         'record': ''
@@ -211,12 +272,46 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       ),
                       SizedBox(height: 20),
                       TextFormField(
+                        maxLines: 4,
                         controller: _deskripsi,
                         validator: (value) =>
                             (value.isEmpty) ? "Mohon Masukkan Deskripsi" : null,
                         decoration: InputDecoration(
                           labelText: "Deskripsi",
+                          labelStyle: TextStyle(),
                           border: OutlineInputBorder(),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            elevation: 2,
+                            isExpanded: true,
+                            hint: Text('Satuan Unit'),
+                            onChanged: (newValue) {
+                              setState(() {
+                                _unit = newValue;
+                              });
+                            },
+                            value: _unit,
+                            items: listUnit.map<DropdownMenuItem<dynamic>>(
+                              (item) {
+                                print(item);
+                                return DropdownMenuItem(
+                                  child: Text(item),
+                                  value: item,
+                                );
+                              },
+                            ).toList(),
+                          ),
                         ),
                       ),
                       SizedBox(height: 20),
@@ -229,7 +324,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           WhitelistingTextInputFormatter.digitsOnly,
                         ],
                         decoration: InputDecoration(
-                          labelText: "Berat (gram)",
+                          labelText: "Berat",
                           border: OutlineInputBorder(),
                         ),
                       ),
@@ -301,7 +396,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               ? Container()
                               : FlatButton(
                                   onPressed: () {
-                                    getImage();
+                                    // getImageFromGallery();
+                                    getImageDialog();
                                   },
                                   padding: EdgeInsets.all(0),
                                   child: Container(
