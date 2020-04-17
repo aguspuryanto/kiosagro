@@ -105,6 +105,65 @@ class _ProductListState extends State<ProductList> {
     });
   }
 
+  Future<void> deleteDialog(product) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text('Apakah anda ingin menghapus produk ini?'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Batal'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text(
+                'Hapus',
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                print(product['SKU']);
+                FirebaseDatabase.instance
+                    .reference()
+                    .child('/products/${product['SKU']}')
+                    .remove()
+                    .then((value) => print('deleted'));
+
+                FirebaseDatabase.instance
+                    .reference()
+                    .child(
+                        '/users/${product['Merchant']}/products/${product['SKU']}')
+                    .remove()
+                    .then((value) => print('deleted from user'));
+
+                FirebaseStorage.instance
+                    .ref()
+                    .child('/products/${product['SKU']}/1.jpeg')
+                    .delete()
+                    .then((value) {
+                  print('deleted storage');
+                });
+
+                var tempList = [];
+                listProduct.forEach((prod) {
+                  if (prod['SKU'] != product['SKU']) {
+                    tempList.add(prod);
+                  }
+                });
+                setState(() {
+                  listProduct = tempList;
+                });
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<UserProvider>(context);
@@ -145,37 +204,7 @@ class _ProductListState extends State<ProductList> {
             ),
             trailing: IconButton(
               onPressed: () {
-                print(product['SKU']);
-                FirebaseDatabase.instance
-                    .reference()
-                    .child('/products/${product['SKU']}')
-                    .remove()
-                    .then((value) => print('deleted'));
-
-                FirebaseDatabase.instance
-                    .reference()
-                    .child(
-                        '/users/${product['Merchant']}/products/${product['SKU']}')
-                    .remove()
-                    .then((value) => print('deleted from user'));
-
-                FirebaseStorage.instance
-                    .ref()
-                    .child('/products/${product['SKU']}/1.jpeg')
-                    .delete()
-                    .then((value) {
-                  print('deleted storage');
-                });
-
-                var tempList = [];
-                listProduct.forEach((prod) {
-                  if (prod['SKU'] != product['SKU']) {
-                    tempList.add(prod);
-                  }
-                });
-                setState(() {
-                  listProduct = tempList;
-                });
+                deleteDialog(product);
               },
               icon: Icon(
                 Icons.delete,

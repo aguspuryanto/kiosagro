@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -148,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                PopularListProducts(products: products),
+                PopularListProducts(),
                 Padding(
                   padding: EdgeInsets.all(20),
                   child: Text(
@@ -158,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                NewListProducts(products: products)
+                NewListProducts()
               ],
             ),
           );
@@ -213,8 +214,9 @@ class _BannerSliderState extends State<BannerSlider> {
               width: MediaQuery.of(context).size.width,
               height: 150,
               color: Colors.greenAccent[100],
-              child: Image.network(
-                'https://firebasestorage.googleapis.com/v0/b/projectflutter-9b7b1.appspot.com/o/cms%2Fbanner.png?alt=media&token=fb4561a6-c9af-4fde-acf3-0533498a7a15',
+              child: CachedNetworkImage(
+                imageUrl:
+                    'https://firebasestorage.googleapis.com/v0/b/projectflutter-9b7b1.appspot.com/o/cms%2Fbanner.png?alt=media&token=fb4561a6-c9af-4fde-acf3-0533498a7a15',
                 fit: BoxFit.fill,
               ),
             ),
@@ -222,8 +224,9 @@ class _BannerSliderState extends State<BannerSlider> {
               width: MediaQuery.of(context).size.width,
               height: 150,
               color: Colors.greenAccent[100],
-              child: Image.network(
-                'https://firebasestorage.googleapis.com/v0/b/projectflutter-9b7b1.appspot.com/o/cms%2Fbanner2.png?alt=media&token=b6a9abc7-ef2e-4281-8b04-422e42b200d9',
+              child: CachedNetworkImage(
+                imageUrl:
+                    'https://firebasestorage.googleapis.com/v0/b/projectflutter-9b7b1.appspot.com/o/cms%2Fbanner2.png?alt=media&token=b6a9abc7-ef2e-4281-8b04-422e42b200d9',
                 fit: BoxFit.fill,
               ),
             ),
@@ -231,8 +234,9 @@ class _BannerSliderState extends State<BannerSlider> {
               width: MediaQuery.of(context).size.width,
               height: 150,
               color: Colors.greenAccent[100],
-              child: Image.network(
-                'https://firebasestorage.googleapis.com/v0/b/projectflutter-9b7b1.appspot.com/o/cms%2Fbanner3.png?alt=media&token=eab2db8a-0d22-4abf-b322-3df44200f9de',
+              child: CachedNetworkImage(
+                imageUrl:
+                    'https://firebasestorage.googleapis.com/v0/b/projectflutter-9b7b1.appspot.com/o/cms%2Fbanner3.png?alt=media&token=eab2db8a-0d22-4abf-b322-3df44200f9de',
                 fit: BoxFit.fill,
               ),
             ),
@@ -255,33 +259,16 @@ class _BannerSliderState extends State<BannerSlider> {
 }
 
 class PopularListProducts extends StatelessWidget {
-  const PopularListProducts({
-    Key key,
-    @required this.products,
-  }) : super(key: key);
-
-  final ProductProvider products;
-
   @override
   Widget build(BuildContext context) {
     var products = Provider.of<ProductProvider>(context);
 
-    List<ProductModel> sortedProducts = products.products;
-
-    sortedProducts.sort((a, b) {
-      return (a.priority.toString().compareTo(b.priority.toString()));
-    });
-    var index = 0;
     return Container(
       height: MediaQuery.of(context).size.height / 3 - 20,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        children: sortedProducts.map<Widget>((prod) {
-          index++;
-          if (index <= 6)
-            return ProductCard(prod);
-          else
-            return SizedBox();
+        children: products.popularProduct.map<Widget>((prod) {
+          return ProductCard(prod);
         }).toList(),
       ),
     );
@@ -289,13 +276,6 @@ class PopularListProducts extends StatelessWidget {
 }
 
 class NewListProducts extends StatelessWidget {
-  const NewListProducts({
-    Key key,
-    @required this.products,
-  }) : super(key: key);
-
-  final ProductProvider products;
-
   @override
   Widget build(BuildContext context) {
     var products = Provider.of<ProductProvider>(context);
@@ -305,14 +285,9 @@ class NewListProducts extends StatelessWidget {
     sortedProducts.sort((a, b) {
       return (a.record.compareTo(b.record));
     });
-    var index = 0;
     return Wrap(
       children: sortedProducts.map<Widget>((prod) {
-        // index++;
-        // if (index < 10)
         return ProductCard(prod);
-        // else
-        //   return SizedBox();
       }).toList(),
     );
   }
@@ -373,8 +348,8 @@ class Category extends StatelessWidget {
               color: Colors.greenAccent[100],
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Image.network(
-              _image,
+            child: CachedNetworkImage(
+              imageUrl: _image,
               fit: BoxFit.fill,
             ),
           ),
