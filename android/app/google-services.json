@@ -1,50 +1,80 @@
 {
   "project_info": {
-    "project_number": "791361054264",
-    "firebase_url": "https://projectflutter-9b7b1.firebaseio.com",
-    "project_id": "projectflutter-9b7b1",
-    "storage_bucket": "projectflutter-9b7b1.appspot.com"
+    "project_number": "716625047112",
+    "firebase_url": "https://kiosagro-ec368.firebaseio.com",
+    "project_id": "kiosagro-ec368",
+    "storage_bucket": "kiosagro-ec368.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:791361054264:android:ff45c47ad2f1b7a065a8cd",
+        "mobilesdk_app_id": "1:716625047112:android:fa27f7eebcc9c0e459f27d",
         "android_client_info": {
           "package_name": "com.example.kios_agro"
         }
       },
       "oauth_client": [
         {
-          "client_id": "791361054264-su676fqnriblfajp65gr6j02kg173pri.apps.googleusercontent.com",
+          "client_id": "716625047112-i36c38hg02tp8d01lgjk4a5j18mmcv7r.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.kios_agro",
-            "certificate_hash": "2a6940ea5c4ce16bcc9386b2a5b9d4fa2896369e"
+            "certificate_hash": "ac43a11fab3409c3214a2414eb98c619eb4b7afd"
           }
         },
         {
-          "client_id": "791361054264-tio7tabf46jm3isrdjf774h1uvg36n6v.apps.googleusercontent.com",
+          "client_id": "716625047112-oh3kfiqhfmm9sklfd2pbu6aqh0502dhr.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDS8zUgRRcJuTQzMQb6P-Uce7gK3w2MmPc"
+          "current_key": "AIzaSyAFGLZK0WskD3Yfs7ivMYMYbG29Djpgog8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "791361054264-tio7tabf46jm3isrdjf774h1uvg36n6v.apps.googleusercontent.com",
+              "client_id": "716625047112-oh3kfiqhfmm9sklfd2pbu6aqh0502dhr.apps.googleusercontent.com",
               "client_type": 3
-            },
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:716625047112:android:9d3c9f508999132459f27d",
+        "android_client_info": {
+          "package_name": "com.kiosagro.aplikasi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "716625047112-qlg1cueqkmsdh2bbvim18pb0rb7ih90h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kiosagro.aplikasi",
+            "certificate_hash": "cc9d79949287e7d9be0ffd5e612d3c6cf6b95f1d"
+          }
+        },
+        {
+          "client_id": "716625047112-oh3kfiqhfmm9sklfd2pbu6aqh0502dhr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFGLZK0WskD3Yfs7ivMYMYbG29Djpgog8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
             {
-              "client_id": "791361054264-u2j71rm7mvs07r8c97783m6upemfr5bm.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.kiosAgro"
-              }
+              "client_id": "716625047112-oh3kfiqhfmm9sklfd2pbu6aqh0502dhr.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         }
