@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:kios_agro/models/product_model.dart';
 import 'package:kios_agro/providers/auth_provider.dart';
@@ -262,11 +261,11 @@ class PopularListProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var products = Provider.of<ProductProvider>(context);
+    print(products.popularProduct.length);
 
     return Container(
       height: MediaQuery.of(context).size.height / 3 - 20,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
+      child: Wrap(
         children: products.popularProduct.map<Widget>((prod) {
           return ProductCard(prod);
         }).toList(),

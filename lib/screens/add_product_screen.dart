@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,7 +8,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:kios_agro/providers/user_provider.dart';
 import 'package:kios_agro/screens/screen_control.dart';
-import 'package:path/path.dart' as Path;
 import 'package:provider/provider.dart';
 
 class AddProductScreen extends StatefulWidget {
@@ -72,17 +70,21 @@ class _AddProductScreenState extends State<AddProductScreen> {
     Future getImageFromCamera() async {
       var image = await ImagePicker.pickImage(source: ImageSource.camera);
 
-      setState(() {
-        _images.add(image);
-      });
+      if (image != null) {
+        setState(() {
+          _images.add(image);
+        });
+      }
     }
 
     Future getImageFromGallery() async {
       var image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
-      setState(() {
-        _images.add(image);
-      });
+      if (image != null) {
+        setState(() {
+          _images.add(image);
+        });
+      }
     }
 
     Future<void> getImageDialog() async {
@@ -132,19 +134,26 @@ class _AddProductScreenState extends State<AddProductScreen> {
       );
     }
 
-    Future uploadImage(_image) async {
-      var imageUrl = '';
+    Future uploadImage() async {
+      var imageUrl = [];
       print('upload');
-      StorageReference storageReference =
-          storageRef.child('/products/${dbRef.key}/${_images.length}.jpeg');
 
-      StorageUploadTask uploadTask = storageReference.putFile(_image);
-      await uploadTask.onComplete;
-      print('File uploaded');
-      await storageReference.getDownloadURL().then((value) {
-        print(value);
-        imageUrl = value;
-      });
+      var index = 1;
+
+      for (var _image in _images) {
+        StorageReference storageReference =
+            storageRef.child('/products/${dbRef.key}/$index.jpeg');
+
+        StorageUploadTask uploadTask = storageReference.putFile(_image);
+        await uploadTask.onComplete;
+        print('File uploaded');
+        await storageReference.getDownloadURL().then((value) {
+          print(value);
+          imageUrl.add(value);
+        });
+        index++;
+      }
+
       return imageUrl;
     }
 
@@ -159,7 +168,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
       var sku = dbRef.key;
 
-      var imageUrl = await uploadImage(_images[0]);
+      var imageUrl = await uploadImage();
+      print(imageUrl);
 
       var product = {
         'Berat': _berat.text,
@@ -169,7 +179,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
         'Deskripsi': _deskripsi.text,
         'Discount': '',
         'Harga': _harga.text,
-        'Image': [imageUrl],
+        'Image': imageUrl,
         'Kota': user.user.alamat['kecamatan'],
         'Merchant': user.user.key,
         'Name': _nama.text,
@@ -183,6 +193,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
             DateFormat('yyyyMMddHHmmss').format(DateTime.now()).toString(),
         'record': ''
       };
+
+      print(product);
 
       await dbRef.set(product).then((_) {
         print('produk berhasil ditambahkan');
@@ -392,7 +404,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                     child: Image.file(image)))
                                 .toList(),
                           ),
-                          (_images.length >= 1
+                          (_images.length >= 5
                               ? Container()
                               : FlatButton(
                                   onPressed: () {
