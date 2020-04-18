@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kios_agro/models/product_model.dart';
 import 'package:kios_agro/providers/cart_provider.dart';
 import 'package:kios_agro/providers/user_provider.dart';
-import 'package:kios_agro/storage/fire_storage_services.dart';
 import 'package:provider/provider.dart';
 
 class DetailProductScreen extends StatefulWidget {
