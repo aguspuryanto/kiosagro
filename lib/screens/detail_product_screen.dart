@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:kios_agro/models/product_model.dart';
@@ -277,6 +278,8 @@ class ImageSlider extends StatefulWidget {
 }
 
 class _ImageSliderState extends State<ImageSlider> {
+  ProductModel product;
+  var image;
   var _carouselIndex = 0;
   var _imageList = [];
 
@@ -290,6 +293,8 @@ class _ImageSliderState extends State<ImageSlider> {
         _imageList = widget.widget.product.images;
       });
     }
+    product = widget.widget.product;
+    image = widget.widget.image;
   }
 
   Widget indicator(int idx) {
@@ -310,37 +315,74 @@ class _ImageSliderState extends State<ImageSlider> {
   @override
   Widget build(BuildContext context) {
     print(widget.widget.product.images);
+    var idx = -1;
 
-    return Column(
-      children: <Widget>[
-        CarouselSlider.builder(
-            itemCount: 2,
-            viewportFraction: 1.0,
-            enableInfiniteScroll: false,
-            onPageChanged: (idx) {
-              setState(() {
-                _carouselIndex = idx;
-              });
-            },
-            itemBuilder: (context, int) {
-              return Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 3,
-                margin: EdgeInsets.all(16),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: widget.widget.image,
-                ),
-              );
-            }),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            indicator(0),
-            indicator(1),
-          ],
-        )
-      ],
-    );
+    if (product.images is List) {
+      return Column(
+        children: <Widget>[
+          CarouselSlider.builder(
+              itemCount: product.images.length,
+              viewportFraction: 1.0,
+              enableInfiniteScroll: false,
+              onPageChanged: (idx) {
+                setState(() {
+                  _carouselIndex = idx;
+                });
+              },
+              itemBuilder: (context, index) {
+                return Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height / 3,
+                  margin: EdgeInsets.all(16),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: CachedNetworkImage(
+                      imageUrl: product.images[index],
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                );
+              }),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: product.images.map<Widget>((image) {
+              idx++;
+              return indicator(idx);
+            }).toList(),
+          )
+        ],
+      );
+    } else {
+      return Column(
+        children: <Widget>[
+          CarouselSlider.builder(
+              itemCount: 1,
+              viewportFraction: 1.0,
+              enableInfiniteScroll: false,
+              onPageChanged: (idx) {
+                setState(() {
+                  _carouselIndex = idx;
+                });
+              },
+              itemBuilder: (context, int) {
+                return Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height / 3,
+                  margin: EdgeInsets.all(16),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: widget.widget.image,
+                  ),
+                );
+              }),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              indicator(0),
+            ],
+          )
+        ],
+      );
+    }
   }
 }
