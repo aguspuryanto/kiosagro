@@ -22,8 +22,6 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     var cart = Provider.of<CartProvider>(context);
     var auth = Provider.of<AuthProvider>(context);
 
-    print('uid: ${auth.user.uid}');
-
     return PreferredSize(
       preferredSize: Size.fromHeight(_height),
       child: AppBar(
@@ -59,10 +57,14 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
               margin: EdgeInsets.only(top: 10, right: 10),
               child: IconButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CartDetailScreen()));
+                  if (auth.user != null) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CartDetailScreen()));
+                  } else {
+                    auth.setStatus(Status.Unauthenticated);
+                  }
                 },
                 icon: Icon(
                   Icons.shopping_cart,
@@ -215,6 +217,16 @@ class _BannerSliderState extends State<BannerSlider> {
               color: Colors.greenAccent[100],
               child: CachedNetworkImage(
                 imageUrl:
+                    'https://firebasestorage.googleapis.com/v0/b/projectflutter-9b7b1.appspot.com/o/cms%2Fbanner4.jpeg?alt=media&token=0b900b52-044a-4161-ac61-8631242e3c47',
+                fit: BoxFit.fill,
+              ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 150,
+              color: Colors.greenAccent[100],
+              child: CachedNetworkImage(
+                imageUrl:
                     'https://firebasestorage.googleapis.com/v0/b/projectflutter-9b7b1.appspot.com/o/cms%2Fbanner.png?alt=media&token=fb4561a6-c9af-4fde-acf3-0533498a7a15',
                 fit: BoxFit.fill,
               ),
@@ -250,6 +262,7 @@ class _BannerSliderState extends State<BannerSlider> {
             indicator(0),
             indicator(1),
             indicator(2),
+            indicator(3),
           ],
         ),
       ],

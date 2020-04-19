@@ -48,9 +48,13 @@ class _ScreenControlState extends State<ScreenControl> {
       body: ScreenList[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         onTap: (idx) {
-          setState(() {
-            _selectedIndex = idx;
-          });
+          if (user.user != null) {
+            setState(() {
+              _selectedIndex = idx;
+            });
+          } else {
+            auth.setStatus(Status.Unauthenticated);
+          }
         },
         currentIndex: _selectedIndex,
         showUnselectedLabels: false,

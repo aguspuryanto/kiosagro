@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kios_agro/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
-enum Status { Pembeli, Penjual }
+enum UserStatus { Pembeli, Penjual }
 
 class OrderAppBar extends StatelessWidget implements PreferredSizeWidget {
   final _height;
@@ -37,7 +37,7 @@ class _OrderScreenState extends State<OrderScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    status = Status.Pembeli;
+    status = UserStatus.Pembeli;
   }
 
   @override
@@ -55,16 +55,17 @@ class _OrderScreenState extends State<OrderScreen> {
                 MaterialButton(
                   onPressed: () {
                     setState(() {
-                      status = Status.Pembeli;
+                      status = UserStatus.Pembeli;
                     });
                   },
                   minWidth: MediaQuery.of(context).size.width / 2,
-                  color:
-                      (status == Status.Pembeli ? Colors.green : Colors.white),
+                  color: (status == UserStatus.Pembeli
+                      ? Colors.green
+                      : Colors.white),
                   child: Text(
                     'Pembeli',
                     style: TextStyle(
-                      color: (status == Status.Penjual
+                      color: (status == UserStatus.Penjual
                           ? Colors.green
                           : Colors.white),
                       fontSize: 20,
@@ -75,15 +76,16 @@ class _OrderScreenState extends State<OrderScreen> {
                   minWidth: MediaQuery.of(context).size.width / 2,
                   onPressed: () {
                     setState(() {
-                      status = Status.Penjual;
+                      status = UserStatus.Penjual;
                     });
                   },
-                  color:
-                      (status == Status.Penjual ? Colors.green : Colors.white),
+                  color: (status == UserStatus.Penjual
+                      ? Colors.green
+                      : Colors.white),
                   child: Text(
                     'Penjual',
                     style: TextStyle(
-                      color: (status == Status.Pembeli
+                      color: (status == UserStatus.Pembeli
                           ? Colors.green
                           : Colors.white),
                       fontSize: 20,
@@ -92,7 +94,7 @@ class _OrderScreenState extends State<OrderScreen> {
                 ),
               ],
             ),
-            (status == Status.Pembeli
+            (status == UserStatus.Pembeli
                 ? PembeliContent(user)
                 : PenjualContent(user)),
           ],

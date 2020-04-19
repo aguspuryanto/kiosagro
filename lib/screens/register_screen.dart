@@ -120,6 +120,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               content: Text('Email sudah terdaftar'),
             ),
           );
+        else {
+          auth.setStatus(Status.Unauthenticated);
+        }
       }
     }
 

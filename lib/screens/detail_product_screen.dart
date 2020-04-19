@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:kios_agro/models/product_model.dart';
+import 'package:kios_agro/providers/auth_provider.dart';
 import 'package:kios_agro/providers/cart_provider.dart';
 import 'package:kios_agro/providers/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -51,6 +52,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
   Widget build(BuildContext context) {
     var user = Provider.of<UserProvider>(context).user;
     var cart = Provider.of<CartProvider>(context);
+    var auth = Provider.of<AuthProvider>(context);
 
     checkIsComplete() {
       if (!user.telepon.isEmpty &&
@@ -120,35 +122,40 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
               ),
               child: MaterialButton(
                 onPressed: () {
-                  if (user.key == widget.product.merchant) {
-                    _key.currentState.showSnackBar(
-                      SnackBar(
-                        backgroundColor: Colors.red,
-                        content: Text('Tidak boleh membeli produk sendiri'),
-                      ),
-                    );
+                  if (user == null) {
+                    auth.setStatus(Status.Unauthenticated);
+                    Navigator.pop(context);
                   } else {
-                    if (_total != 0) {
-                      print(checkIsComplete());
-                      if (checkIsComplete() == true) {
-                        handleSubmit();
-                        successDialog();
+                    if (user.key == widget.product.merchant) {
+                      _key.currentState.showSnackBar(
+                        SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text('Tidak boleh membeli produk sendiri'),
+                        ),
+                      );
+                    } else {
+                      if (_total != 0) {
+                        print(checkIsComplete());
+                        if (checkIsComplete() == true) {
+                          handleSubmit();
+                          successDialog();
+                        } else {
+                          _key.currentState.showSnackBar(
+                            SnackBar(
+                              backgroundColor: Colors.red,
+                              content: Text(
+                                  'Lengkapi akun pembeli anda terlebih dahulu'),
+                            ),
+                          );
+                        }
                       } else {
                         _key.currentState.showSnackBar(
                           SnackBar(
                             backgroundColor: Colors.red,
-                            content: Text(
-                                'Lengkapi akun pembeli anda terlebih dahulu'),
+                            content: Text('Jumlah produk tidak boleh kosong'),
                           ),
                         );
                       }
-                    } else {
-                      _key.currentState.showSnackBar(
-                        SnackBar(
-                          backgroundColor: Colors.red,
-                          content: Text('Jumlah produk tidak boleh kosong'),
-                        ),
-                      );
                     }
                   }
                 },

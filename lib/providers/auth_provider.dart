@@ -22,7 +22,7 @@ class AuthProvider extends ChangeNotifier {
     'https://www.googleapis.com/auth/contacts.readonly',
   ]);
 
-  Status _status = Status.Uninitialized;
+  Status _status = Status.Authenticated;
 
   AuthProvider.instance() : _auth = FirebaseAuth.instance {
     _auth.onAuthStateChanged.listen(_onAuthStateChanged);

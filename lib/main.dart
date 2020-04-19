@@ -44,7 +44,7 @@ class Splash extends StatelessWidget {
     return SplashScreen(
         image: Image.asset('logo.png'),
         photoSize: 100.0,
-        seconds: 0,
+        seconds: 3,
         navigateAfterSeconds: AfterSplash());
   }
 }
@@ -53,6 +53,7 @@ class AfterSplash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<UserProvider>(context);
+    print(user.user);
 
     return Consumer(
       builder: (context, AuthProvider auth, _) {
@@ -65,7 +66,10 @@ class AfterSplash extends StatelessWidget {
             return LoginScreen();
             break;
           case Status.Authenticated:
-            user.getUserData(auth.user.uid);
+            try {
+              user.getUserData(auth.user.uid);
+            } catch (e) {}
+
             return ScreenControl();
             break;
         }
