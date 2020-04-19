@@ -1,8 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:kios_agro/models/product_model.dart';
 import 'package:kios_agro/providers/cart_provider.dart';
 import 'package:kios_agro/providers/user_provider.dart';
-import 'package:kios_agro/storage/fire_storage_services.dart';
 import 'package:provider/provider.dart';
 
 class DetailProductScreen extends StatefulWidget {
@@ -171,15 +172,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height / 3,
-              margin: EdgeInsets.all(16),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: widget.image,
-              ),
-            ),
+            ImageSlider(widget: widget),
             Padding(
               padding: EdgeInsets.all(20),
               child: Column(
@@ -269,5 +262,127 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
         ),
       )),
     );
+  }
+}
+
+class ImageSlider extends StatefulWidget {
+  const ImageSlider({
+    Key key,
+    @required this.widget,
+  }) : super(key: key);
+
+  final DetailProductScreen widget;
+
+  @override
+  _ImageSliderState createState() => _ImageSliderState();
+}
+
+class _ImageSliderState extends State<ImageSlider> {
+  ProductModel product;
+  var image;
+  var _carouselIndex = 0;
+  var _imageList = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.widget.product.images is List &&
+        widget.widget.product.images.length > 0) {
+      setState(() {
+        _imageList = widget.widget.product.images;
+      });
+    }
+    product = widget.widget.product;
+    image = widget.widget.image;
+  }
+
+  Widget indicator(int idx) {
+    var size = (idx == _carouselIndex ? 16.0 : 8.0);
+    var color = (idx == _carouselIndex ? Colors.green : Colors.grey);
+
+    return Container(
+      width: size,
+      height: size,
+      margin: EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print(widget.widget.product.images);
+    var idx = -1;
+
+    if (product.images is List) {
+      return Column(
+        children: <Widget>[
+          CarouselSlider.builder(
+              itemCount: product.images.length,
+              viewportFraction: 1.0,
+              enableInfiniteScroll: false,
+              onPageChanged: (idx) {
+                setState(() {
+                  _carouselIndex = idx;
+                });
+              },
+              itemBuilder: (context, index) {
+                return Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height / 3,
+                  margin: EdgeInsets.all(16),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: CachedNetworkImage(
+                      imageUrl: product.images[index],
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                );
+              }),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: product.images.map<Widget>((image) {
+              idx++;
+              return indicator(idx);
+            }).toList(),
+          )
+        ],
+      );
+    } else {
+      return Column(
+        children: <Widget>[
+          CarouselSlider.builder(
+              itemCount: 1,
+              viewportFraction: 1.0,
+              enableInfiniteScroll: false,
+              onPageChanged: (idx) {
+                setState(() {
+                  _carouselIndex = idx;
+                });
+              },
+              itemBuilder: (context, int) {
+                return Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height / 3,
+                  margin: EdgeInsets.all(16),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: widget.widget.image,
+                  ),
+                );
+              }),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              indicator(0),
+            ],
+          )
+        ],
+      );
+    }
   }
 }

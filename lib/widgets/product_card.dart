@@ -3,7 +3,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:kios_agro/models/product_model.dart';
 import 'package:kios_agro/screens/detail_product_screen.dart';
-import 'package:kios_agro/storage/fire_storage_services.dart';
 
 class ProductCard extends StatefulWidget {
   ProductModel product;

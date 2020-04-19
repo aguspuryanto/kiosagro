@@ -52,12 +52,7 @@ class Splash extends StatelessWidget {
 class AfterSplash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var auth = Provider.of<AuthProvider>(context);
     var user = Provider.of<UserProvider>(context);
-
-    // try {
-    //   user.getUserData(auth.user.uid);
-    // } catch (e) {}
 
     return Consumer(
       builder: (context, AuthProvider auth, _) {
